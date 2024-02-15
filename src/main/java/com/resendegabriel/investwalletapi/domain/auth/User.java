@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "userId")
 @AllArgsConstructor
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -43,6 +45,12 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    public User(String email, String encryptedPassword, UserRole role){
+        this.email = email;
+        this.password = encryptedPassword;
+        this.role = UserRole.CUSTOMER;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -29,12 +29,16 @@ public class AuthenticationService {
     public String[] getBasicAuthCredentials(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Basic ")) {
-            String credentialsBase64 = authorizationHeader.replace("Basic ", "");
-            byte[] decodedBytes = java.util.Base64.getDecoder().decode(credentialsBase64);
-            String credentials = new String(decodedBytes);
-            return credentials.split(":");
+            String base64Credentials = authorizationHeader.replace("Basic ", "");
+            return getBase64Credentials(base64Credentials);
         }
         return null;
+    }
+
+    public String[] getBase64Credentials(String base64Credentials) {
+        byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(decodedBytes);
+        return credentials.split(":");
     }
 
     public void authenticateWithJWT(String token) {

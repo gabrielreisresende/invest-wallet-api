@@ -1,6 +1,7 @@
 package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.auth.User;
+import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,4 +51,14 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Wallet> wallets;
+
+    public Customer(CustomerRegisterDTO customerRegisterDTO, User user){
+        this.cpf = customerRegisterDTO.cpf();
+        this.firstName = customerRegisterDTO.firstName();
+        this.lastName = customerRegisterDTO.lastName();
+        this.phone = customerRegisterDTO.phone();
+        this.birthDate = customerRegisterDTO.birthDate();
+        this.user = user;
+        this.wallets = new ArrayList<>();
+    }
 }
