@@ -1,9 +1,9 @@
 package com.resendegabriel.investwalletapi.configuration.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -22,10 +22,9 @@ public class SecurityConfiguration {
     @Autowired
     private SecurityFilter securityFilter;
 
-    @Value("${server.servlet.context-path}")
-    private String API_STANDARD_URL;
-
     private static final String H2_DATABASE_URL = "/h2-console/**";
+
+    private static final String CUSTOMER_ROLE = "CUSTOMER";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,8 +36,13 @@ public class SecurityConfiguration {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(API_STANDARD_URL + "/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/customers/**").permitAll()
                         .requestMatchers(H2_DATABASE_URL).permitAll()
+
+                        .requestMatchers(HttpMethod.PUT, "/customers/**").hasRole(CUSTOMER_ROLE)
+                        .requestMatchers(HttpMethod.GET, "/customers/**").hasRole(CUSTOMER_ROLE)
+                        .requestMatchers(HttpMethod.DELETE, "/customers/**").hasRole(CUSTOMER_ROLE)
 
                         .anyRequest().authenticated())
 

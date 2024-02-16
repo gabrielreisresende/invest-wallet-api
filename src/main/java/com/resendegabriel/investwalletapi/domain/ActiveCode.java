@@ -25,5 +25,5 @@ public class ActiveCode {
 
     @JoinColumn(name = "active_sector_id",nullable = false)
     @ManyToOne
-    private ActiveSector sector;
+    private ActiveSector activeSector;
 }

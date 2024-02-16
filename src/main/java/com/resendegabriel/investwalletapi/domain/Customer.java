@@ -1,6 +1,9 @@
 package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.auth.User;
+import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
+import com.resendegabriel.investwalletapi.domain.dto.CustomerUpdateDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,11 +13,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,6 +31,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(of = "customerId")
+@SQLDelete(sql = "UPDATE tb_customers SET deleted = true WHERE customer_id=?")
+@SQLRestriction("deleted=false")
 public class Customer {
 
     @Id
@@ -43,10 +57,31 @@ public class Customer {
     @Column(nullable = false)
     private LocalDate birthDate;
 
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
+
     @JoinColumn(name = "user_id", nullable = false)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private User user;
 
     @OneToMany(mappedBy = "customer")
     private List<Wallet> wallets;
+
+    public Customer(CustomerRegisterDTO customerRegisterDTO, User user) {
+        this.cpf = customerRegisterDTO.cpf();
+        this.firstName = customerRegisterDTO.firstName();
+        this.lastName = customerRegisterDTO.lastName();
+        this.phone = customerRegisterDTO.phone();
+        this.birthDate = customerRegisterDTO.birthDate();
+        this.user = user;
+        this.wallets = new ArrayList<>();
+    }
+
+    public void updateData(CustomerUpdateDTO customerUpdateDTO) {
+        this.cpf = customerUpdateDTO.cpf() != null ? customerUpdateDTO.cpf() : this.cpf;
+        this.firstName = customerUpdateDTO.firstName() != null ? customerUpdateDTO.firstName() : this.firstName;
+        this.lastName = customerUpdateDTO.lastName() != null ? customerUpdateDTO.lastName() : this.lastName;
+        this.phone = customerUpdateDTO.phone() != null ? customerUpdateDTO.phone() : this.phone;
+        this.birthDate = customerUpdateDTO.birthDate() != null ? customerUpdateDTO.birthDate() : this.birthDate;
+    }
 }

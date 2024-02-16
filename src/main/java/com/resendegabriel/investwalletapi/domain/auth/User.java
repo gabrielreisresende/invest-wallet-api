@@ -2,7 +2,6 @@ package com.resendegabriel.investwalletapi.domain.auth;
 
 import com.resendegabriel.investwalletapi.domain.auth.enums.UserRole;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,14 +10,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -28,6 +29,9 @@ import java.util.Collection;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "userId")
 @AllArgsConstructor
+@Builder
+@SQLDelete(sql = "UPDATE tb_users SET deleted = true WHERE user_id=?")
+@SQLRestriction("deleted=false")
 public class User implements UserDetails {
 
     @Id
@@ -43,6 +47,15 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
+
+    public User(String email, String encryptedPassword, UserRole role) {
+        this.email = email;
+        this.password = encryptedPassword;
+        this.role = UserRole.CUSTOMER;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,5 +90,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void updateEmail(String newEmail) {
+        this.email = newEmail;
     }
 }
