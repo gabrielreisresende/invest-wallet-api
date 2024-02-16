@@ -38,7 +38,7 @@ class AuthenticationServiceTest {
 
     @BeforeAll
     static void init() {
-        user = new User(1L, "email@email.com", new BCryptPasswordEncoder().encode("12345"), UserRole.CUSTOMER);
+        user = new User(1L, "email@email.com", new BCryptPasswordEncoder().encode("12345"), UserRole.CUSTOMER, Boolean.FALSE);
     }
 
     @Test

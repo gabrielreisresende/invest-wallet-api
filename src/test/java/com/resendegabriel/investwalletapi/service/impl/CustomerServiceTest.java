@@ -140,4 +140,19 @@ class CustomerServiceTest {
     void shouldThrowResourceNotFoundExceptionWhenTryToGetByUserIdACustomerThatDoesNotExist() {
         assertThrows(ResourceNotFoundException.class, () -> customerService.getByUserId(1L));
     }
+
+    @Test
+    void shouldSoftDeleteACustomerById() {
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
+
+        customerService.deleteById(1L);
+
+        then(customerRepository).should().deleteById(anyLong());
+        then(customerRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundExceptionWhenTryToDeleteByIdACustomerThatDoesNotExist() {
+        assertThrows(ResourceNotFoundException.class, () -> customerService.deleteById(1L));
+    }
 }

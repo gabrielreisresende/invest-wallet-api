@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -160,6 +161,20 @@ class CustomerControllerTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturnCode403WhenTryToGetACustomerByUserIdWithAdminRole() throws Exception {
         mvc.perform(get("/customers/{userId}", 1))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode204WhenDeleteACustomerWithCustomerRole() throws Exception {
+        mvc.perform(delete("/customers/{customerId}", 1))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode204WhenDeleteACustomerWithAdminRole() throws Exception {
+        mvc.perform(delete("/customers/{customerId}", 1))
                 .andExpect(status().isForbidden());
     }
 }
