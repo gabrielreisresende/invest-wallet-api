@@ -7,6 +7,7 @@ import com.resendegabriel.investwalletapi.service.ICustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,5 +35,10 @@ public class CustomerController {
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerResponseDTO> update(@PathVariable Long customerId, @RequestBody @Valid CustomerUpdateDTO customerUpdateDTO) {
         return ResponseEntity.ok().body(customerService.update(customerId, customerUpdateDTO));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<CustomerResponseDTO> getByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(customerService.getByUserId(userId));
     }
 }

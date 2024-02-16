@@ -9,4 +9,6 @@ public interface ICustomerService {
     CustomerResponseDTO create(CustomerRegisterDTO customerRegisterDTO);
 
     CustomerResponseDTO update(Long customerId, CustomerUpdateDTO customerUpdateDTO);
+
+    CustomerResponseDTO getByUserId(Long userId);
 }

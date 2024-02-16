@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                         .requestMatchers(H2_DATABASE_URL).permitAll()
 
                         .requestMatchers(HttpMethod.PUT, "/customers/**").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/customers/**").hasRole("CUSTOMER")
 
                         .anyRequest().authenticated())
 
