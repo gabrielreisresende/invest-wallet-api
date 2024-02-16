@@ -15,6 +15,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,6 +30,8 @@ import java.util.Collection;
 @EqualsAndHashCode(of = "userId")
 @AllArgsConstructor
 @Builder
+@SQLDelete(sql = "UPDATE tb_users SET deleted = true WHERE user_id=?")
+@SQLRestriction("deleted=false")
 public class User implements UserDetails {
 
     @Id
@@ -43,6 +47,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
 
     public User(String email, String encryptedPassword, UserRole role) {
         this.email = email;

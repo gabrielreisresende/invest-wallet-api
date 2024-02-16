@@ -11,4 +11,6 @@ public interface ICustomerService {
     CustomerResponseDTO update(Long customerId, CustomerUpdateDTO customerUpdateDTO);
 
     CustomerResponseDTO getByUserId(Long userId);
+
+    void deleteById(Long customerId);
 }

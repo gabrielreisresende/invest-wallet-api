@@ -44,6 +44,13 @@ public class CustomerService implements ICustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException("There is no customer with this userId. UserId " + userId)));
     }
 
+    @Override
+    @Transactional
+    public void deleteById(Long customerId) {
+        findById(customerId);
+        customerRepository.deleteById(customerId);
+    }
+
     private Customer findById(Long customerId) {
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("There isn't any customer with this id. Id " + customerId));
