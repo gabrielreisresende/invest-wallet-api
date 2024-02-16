@@ -1,7 +1,6 @@
 package com.resendegabriel.investwalletapi.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +20,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex, HttpServletRequest request) {
         return genericExceptionHandler(ex, request, "Invalid Body", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<StandardError> methodArgumentNotValidExceptionHandler(ResourceNotFoundException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Resource Not found", HttpStatus.NOT_FOUND);
     }
 
     private ResponseEntity<StandardError> genericExceptionHandler(Exception ex, HttpServletRequest request, String error, HttpStatus status) {
