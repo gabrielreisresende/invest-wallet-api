@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -35,7 +34,6 @@ class UserServiceTest {
     @Mock
     private AuthenticationService authenticationService;
 
-    @Spy
     private static User user;
 
     @BeforeAll
@@ -79,8 +77,7 @@ class UserServiceTest {
 
         userService.updateEmail(1L, "novoEmail@email.com");
 
-        then(user).should().updateEmail(anyString());
-        then(user).shouldHaveNoMoreInteractions();
+        assertEquals("novoEmail@email.com", user.getEmail());
     }
 
     @Test
