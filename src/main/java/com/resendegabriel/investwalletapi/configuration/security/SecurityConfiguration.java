@@ -38,6 +38,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/customers/**").permitAll()
                         .requestMatchers(H2_DATABASE_URL).permitAll()
 
+                        .requestMatchers(HttpMethod.PUT, "/customers/**").hasRole("CUSTOMER")
+
                         .anyRequest().authenticated())
 
                 .headers(headers -> headers.frameOptions().disable())

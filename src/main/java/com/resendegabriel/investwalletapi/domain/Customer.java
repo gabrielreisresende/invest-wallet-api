@@ -2,6 +2,7 @@ package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
+import com.resendegabriel.investwalletapi.domain.dto.CustomerUpdateDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +27,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Customer {
 
     @Id
@@ -52,7 +57,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Wallet> wallets;
 
-    public Customer(CustomerRegisterDTO customerRegisterDTO, User user){
+    public Customer(CustomerRegisterDTO customerRegisterDTO, User user) {
         this.cpf = customerRegisterDTO.cpf();
         this.firstName = customerRegisterDTO.firstName();
         this.lastName = customerRegisterDTO.lastName();
@@ -60,5 +65,13 @@ public class Customer {
         this.birthDate = customerRegisterDTO.birthDate();
         this.user = user;
         this.wallets = new ArrayList<>();
+    }
+
+    public void updateData(CustomerUpdateDTO customerUpdateDTO) {
+        this.cpf = customerUpdateDTO.cpf() != null ? customerUpdateDTO.cpf() : this.cpf;
+        this.firstName = customerUpdateDTO.firstName() != null ? customerUpdateDTO.firstName() : this.firstName;
+        this.lastName = customerUpdateDTO.lastName() != null ? customerUpdateDTO.lastName() : this.lastName;
+        this.phone = customerUpdateDTO.phone() != null ? customerUpdateDTO.phone() : this.phone;
+        this.birthDate = customerUpdateDTO.birthDate() != null ? customerUpdateDTO.birthDate() : this.birthDate;
     }
 }

@@ -2,7 +2,6 @@ package com.resendegabriel.investwalletapi.domain.auth;
 
 import com.resendegabriel.investwalletapi.domain.auth.enums.UserRole;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,7 +18,6 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -46,7 +44,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public User(String email, String encryptedPassword, UserRole role){
+    public User(String email, String encryptedPassword, UserRole role) {
         this.email = email;
         this.password = encryptedPassword;
         this.role = UserRole.CUSTOMER;
@@ -85,5 +83,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void updateEmail(String newEmail) {
+        this.email = newEmail;
     }
 }

@@ -2,6 +2,7 @@ package com.resendegabriel.investwalletapi.service.auth;
 
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.auth.enums.UserRole;
+import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,5 +37,16 @@ public class UserService implements UserDetailsService {
         var userEmail = decryptedCredentials[0];
         var userPassword = decryptedCredentials[1];
         return new User(userEmail, new BCryptPasswordEncoder().encode(userPassword), UserRole.CUSTOMER);
+    }
+
+    @Transactional
+    public void updateEmail(Long userId, String newEmail) {
+        var user = findById(userId);
+        user.updateEmail(newEmail);
+    }
+
+    private User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("There isn't any user with this id. Id " + userId));
     }
 }
