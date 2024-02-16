@@ -22,7 +22,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -114,7 +116,7 @@ class CustomerControllerTest {
 
     @Test
     @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenUpdateACustomer() throws Exception {
+    void shouldReturnCode200WhenUpdateACustomerWithCustomerRole() throws Exception {
         String json = new ObjectMapper().writeValueAsString(customerUpdateDTO);
 
         mvc.perform(put("/customers/{customerId}", 1)
@@ -132,6 +134,32 @@ class CustomerControllerTest {
         mvc.perform(put("/customers/{customerId}", 1)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetACustomerByUserIdWithCustomerRole() throws Exception {
+        when(customerService.getByUserId(anyLong())).thenReturn(customerResponseDTO);
+
+        mvc.perform(get("/customers/{userId}", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customerId").value(customerResponseDTO.customerId()))
+                .andExpect(jsonPath("$.cpf").value(customerResponseDTO.cpf()))
+                .andExpect(jsonPath("$.firstName").value(customerResponseDTO.firstName()))
+                .andExpect(jsonPath("$.lastName").value(customerResponseDTO.lastName()))
+                .andExpect(jsonPath("$.phone").value(customerResponseDTO.phone()))
+                .andExpect(jsonPath("$.birthDate").value(customerResponseDTO.birthDate().toString()))
+                .andExpect(jsonPath("$.user.userId").value(customerResponseDTO.user().userId()))
+                .andExpect(jsonPath("$.user.email").value(customerResponseDTO.user().email()))
+                .andExpect(jsonPath("$.user.userRole").value(customerResponseDTO.user().userRole().toString()))
+                .andExpect(jsonPath("$.wallets").value(customerResponseDTO.wallets()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToGetACustomerByUserIdWithAdminRole() throws Exception {
+        mvc.perform(get("/customers/{userId}", 1))
                 .andExpect(status().isForbidden());
     }
 }

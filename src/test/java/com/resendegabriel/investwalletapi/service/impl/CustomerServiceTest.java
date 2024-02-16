@@ -121,7 +121,23 @@ class CustomerServiceTest {
     }
 
     @Test
-    void shouldThrowResourceNotFoundExceptionWhenThereIsNoCustomerWithThisId() {
+    void shouldThrowResourceNotFoundExceptionWhenTryToUpdateACustomerThatDoesNotExist() {
         assertThrows(ResourceNotFoundException.class, () -> customerService.update(1L, customerUpdateDTO));
+    }
+
+    @Test
+    void shouldGetACustomerByUserId() {
+        when(customerRepository.findByUser_UserId(anyLong())).thenReturn(Optional.of(customer));
+
+        var response = customerService.getByUserId(1L);
+
+        assertEquals(new CustomerResponseDTO(customer), response);
+        then(customerRepository).should().findByUser_UserId(anyLong());
+        then(customerRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundExceptionWhenTryToGetByUserIdACustomerThatDoesNotExist() {
+        assertThrows(ResourceNotFoundException.class, () -> customerService.getByUserId(1L));
     }
 }
