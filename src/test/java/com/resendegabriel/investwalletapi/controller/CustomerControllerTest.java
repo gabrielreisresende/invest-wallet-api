@@ -5,6 +5,8 @@ import com.resendegabriel.investwalletapi.domain.auth.dto.UserResponseDTO;
 import com.resendegabriel.investwalletapi.domain.auth.enums.UserRole;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.CustomerUpdateDTO;
+import com.resendegabriel.investwalletapi.repository.CustomerRepository;
 import com.resendegabriel.investwalletapi.service.ICustomerService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,9 +37,14 @@ class CustomerControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    ICustomerService customerService;
+    private ICustomerService customerService;
+
+    @MockBean
+    CustomerRepository customerRepository;
 
     private static CustomerRegisterDTO customerRegisterDTO;
+
+    private static CustomerUpdateDTO customerUpdateDTO;
 
     private static CustomerResponseDTO customerResponseDTO;
 
@@ -55,6 +64,11 @@ class CustomerControllerTest {
                 .lastName("LastName")
                 .birthDate(LocalDate.now())
                 .phone("312312323")
+                .build();
+
+        customerUpdateDTO = CustomerUpdateDTO.builder()
+                .email("novoEmail@Email.com")
+                .phone("4342342345")
                 .build();
 
         userResponseDTO = UserResponseDTO.builder()
@@ -96,5 +110,28 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.user.email").value(userResponseDTO.email()))
                 .andExpect(jsonPath("$.user.userRole").value(userResponseDTO.userRole().toString()))
                 .andExpect(jsonPath("$.wallets").isEmpty());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenUpdateACustomer() throws Exception {
+        String json = new ObjectMapper().writeValueAsString(customerUpdateDTO);
+
+        mvc.perform(put("/customers/{customerId}", 1)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToUpdateACustomerWithAdminRole() throws Exception {
+        String json = mapper.writeValueAsString(customerUpdateDTO);
+
+        mvc.perform(put("/customers/{customerId}", 1)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 }
