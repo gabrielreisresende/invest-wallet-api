@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +28,15 @@ public class SecurityConfiguration {
 
     private static final String CUSTOMER_ROLE = "CUSTOMER";
 
+    private static final String CUSTOMERS_ENDPOINT = "/customers/**";
+
+    private static final String WALLETS_ENDPOINT = "/wallets/**";
+
+    private static final RequestMatcher[] AUTH_WHITE_LIST = {
+            new AntPathRequestMatcher(H2_DATABASE_URL),
+            new AntPathRequestMatcher("/auth/**")
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -36,13 +47,14 @@ public class SecurityConfiguration {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/customers/**").permitAll()
-                        .requestMatchers(H2_DATABASE_URL).permitAll()
+                        .requestMatchers(AUTH_WHITE_LIST).permitAll()
 
-                        .requestMatchers(HttpMethod.PUT, "/customers/**").hasRole(CUSTOMER_ROLE)
-                        .requestMatchers(HttpMethod.GET, "/customers/**").hasRole(CUSTOMER_ROLE)
-                        .requestMatchers(HttpMethod.DELETE, "/customers/**").hasRole(CUSTOMER_ROLE)
+                        .requestMatchers(HttpMethod.POST, CUSTOMERS_ENDPOINT).permitAll()
+                        .requestMatchers(HttpMethod.PUT, CUSTOMERS_ENDPOINT).hasRole(CUSTOMER_ROLE)
+                        .requestMatchers(HttpMethod.GET, CUSTOMERS_ENDPOINT).hasRole(CUSTOMER_ROLE)
+                        .requestMatchers(HttpMethod.DELETE, CUSTOMERS_ENDPOINT).hasRole(CUSTOMER_ROLE)
+
+                        .requestMatchers(HttpMethod.POST, WALLETS_ENDPOINT).hasRole(CUSTOMER_ROLE)
 
                         .anyRequest().authenticated())
 
