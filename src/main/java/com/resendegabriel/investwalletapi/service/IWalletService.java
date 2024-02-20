@@ -15,4 +15,6 @@ public interface IWalletService {
     WalletResponseDTO getById(Long walletId);
 
     WalletResponseDTO update(Long walletId, UpdateWalletDTO updateWalletDTO);
+
+    void deleteById(Long walletId);
 }

@@ -7,6 +7,7 @@ import com.resendegabriel.investwalletapi.service.IWalletService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +47,11 @@ public class WalletController {
     @PutMapping("/{walletId}")
     public ResponseEntity<WalletResponseDTO> getById(@PathVariable Long walletId, @RequestBody @Valid UpdateWalletDTO updateWalletDTO) {
         return ResponseEntity.ok().body(walletService.update(walletId, updateWalletDTO));
+    }
+
+    @DeleteMapping("/{walletId}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long walletId) {
+        walletService.deleteById(walletId);
+        return ResponseEntity.noContent().build();
     }
 }
