@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class WalletService implements IWalletService {
 
@@ -25,5 +27,14 @@ public class WalletService implements IWalletService {
         var customer = customerService.findById(walletRequestDTO.customerId());
         var wallet = new Wallet(walletRequestDTO, customer);
         return new WalletResponseDTO(walletRepository.save(wallet));
+    }
+
+    @Override
+    public List<WalletResponseDTO> getAll(Long customerId) {
+        customerService.findById(customerId);
+        return walletRepository
+                .findAllByCustomer_CustomerId(customerId)
+                .stream().map(WalletResponseDTO::new)
+                .toList();
     }
 }

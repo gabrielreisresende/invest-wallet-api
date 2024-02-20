@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, CUSTOMERS_ENDPOINT).hasRole(CUSTOMER_ROLE)
 
                         .requestMatchers(HttpMethod.POST, WALLETS_ENDPOINT).hasRole(CUSTOMER_ROLE)
+                        .requestMatchers(HttpMethod.GET, WALLETS_ENDPOINT).hasRole(CUSTOMER_ROLE)
 
                         .anyRequest().authenticated())
 
