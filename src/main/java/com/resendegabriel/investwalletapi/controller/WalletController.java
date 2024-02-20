@@ -1,5 +1,6 @@
 package com.resendegabriel.investwalletapi.controller;
 
+import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +41,10 @@ public class WalletController {
     @GetMapping("/{walletId}")
     public ResponseEntity<WalletResponseDTO> getById(@PathVariable Long walletId) {
         return ResponseEntity.ok().body(walletService.getById(walletId));
+    }
+
+    @PutMapping("/{walletId}")
+    public ResponseEntity<WalletResponseDTO> getById(@PathVariable Long walletId, @RequestBody @Valid UpdateWalletDTO updateWalletDTO) {
+        return ResponseEntity.ok().body(walletService.update(walletId, updateWalletDTO));
     }
 }

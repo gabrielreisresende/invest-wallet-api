@@ -1,5 +1,6 @@
 package com.resendegabriel.investwalletapi.domain;
 
+import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,5 +45,9 @@ public class Wallet {
     public Wallet(WalletRequestDTO walletRequestDTO, Customer customer) {
         this.name = walletRequestDTO.name();
         this.customer = customer;
+    }
+
+    public void updateName(UpdateWalletDTO updateWalletDTO) {
+        this.name = updateWalletDTO.walletName();
     }
 }

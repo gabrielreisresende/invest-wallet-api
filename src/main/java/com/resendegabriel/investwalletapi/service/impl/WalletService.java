@@ -1,6 +1,7 @@
 package com.resendegabriel.investwalletapi.service.impl;
 
 import com.resendegabriel.investwalletapi.domain.Wallet;
+import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
@@ -43,5 +44,18 @@ public class WalletService implements IWalletService {
     public WalletResponseDTO getById(Long walletId) {
         return new WalletResponseDTO(walletRepository.findById(walletId)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no wallet with this id. Id " + walletId)));
+    }
+
+    @Override
+    @Transactional
+    public WalletResponseDTO update(Long walletId, UpdateWalletDTO updateWalletDTO) {
+        var wallet = findWalletEntityById(walletId);
+        wallet.updateName(updateWalletDTO);
+        return new WalletResponseDTO(wallet);
+    }
+
+    private Wallet findWalletEntityById(Long walletId) {
+        return walletRepository.findById(walletId)
+                .orElseThrow(() -> new ResourceNotFoundException("There is no wallet with this id. Id " + walletId));
     }
 }
