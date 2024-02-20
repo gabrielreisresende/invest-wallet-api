@@ -4,6 +4,7 @@ import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
@@ -120,5 +121,19 @@ class WalletServiceTest {
     @Test
     void shouldThrowResourceNotFoundExceptionWhenTryToGetByIdAWalletThatDoesNotExist() {
         assertThrows(ResourceNotFoundException.class, () -> walletService.getById(1L));
+    }
+
+    @Test
+    void shouldUpdateAWalleName() {
+        when(walletRepository.findById(anyLong())).thenReturn(Optional.of(wallet));
+
+        var updateWalletDTO = new UpdateWalletDTO("New wallet name");
+
+        var response = walletService.update(1L, updateWalletDTO);
+
+        assertEquals(updateWalletDTO.walletName(), response.name());
+        assertEquals(1L, response.walletId());
+        then(walletRepository).should().findById(anyLong());
+        then(walletRepository).shouldHaveNoMoreInteractions();
     }
 }

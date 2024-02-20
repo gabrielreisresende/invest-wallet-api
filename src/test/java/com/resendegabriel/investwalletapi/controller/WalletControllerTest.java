@@ -3,6 +3,7 @@ package com.resendegabriel.investwalletapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
@@ -24,6 +25,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +45,8 @@ class WalletControllerTest {
     private static WalletResponseDTO walletResponseDTO;
 
     private static Customer customer;
+
+    private static UpdateWalletDTO updateWalletDTO;
 
     @BeforeAll
     static void init() {
@@ -64,6 +68,8 @@ class WalletControllerTest {
         customer = Customer.builder()
                 .customerId(1L)
                 .build();
+
+        updateWalletDTO = new UpdateWalletDTO("New wallet name");
     }
 
     @Test
@@ -128,7 +134,42 @@ class WalletControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void shouldReturnCode403WhenTryToGetAWalletByIdWithAdminRole() throws Exception {
-        mvc.perform(get("/wallets/customers/{customerId}", 1))
+        mvc.perform(get("/wallets/{walletId}", 1))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenUpdateAWalletNameWithCustomerRole() throws Exception {
+        var newWalletResponse = WalletResponseDTO.builder()
+                .walletId(walletResponseDTO.walletId())
+                .name(updateWalletDTO.walletName())
+                .customer(walletResponseDTO.customer())
+                .actives(walletResponseDTO.actives())
+                .build();
+
+        when(walletService.update(anyLong(), any(UpdateWalletDTO.class))).thenReturn(newWalletResponse);
+
+        var json = new ObjectMapper().writeValueAsString(updateWalletDTO);
+
+        mvc.perform(put("/wallets/{walletId}", 1)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.walletId").value(1))
+                .andExpect(jsonPath("$.name").value(updateWalletDTO.walletName()))
+                .andExpect(jsonPath("$.customer.customerId").value(walletResponseDTO.customer().customerId()))
+                .andExpect(jsonPath("$.actives").isEmpty());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToUpdateAWalletNameWithAdminRole() throws Exception {
+        var json = new ObjectMapper().writeValueAsString(updateWalletDTO);
+
+        mvc.perform(put("/wallets/{walletId}", 1)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 }
