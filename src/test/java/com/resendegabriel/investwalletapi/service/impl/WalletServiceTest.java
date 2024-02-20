@@ -6,6 +6,7 @@ import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.WalletRepository;
 import com.resendegabriel.investwalletapi.service.ICustomerService;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,8 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.then;
@@ -100,5 +103,22 @@ class WalletServiceTest {
         then(customerService).shouldHaveNoMoreInteractions();
         then(walletRepository).should().findAllByCustomer_CustomerId(anyLong());
         then(walletRepository).shouldHaveNoMoreInteractions();
+    }
+
+
+    @Test
+    void shouldGetAWalletById() {
+        when(walletRepository.findById(anyLong())).thenReturn(Optional.of(wallet));
+
+        var response = walletService.getById(1L);
+
+        assertEquals(new WalletResponseDTO(wallet), response);
+        then(walletRepository).should().findById(anyLong());
+        then(walletRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundExceptionWhenTryToGetByIdAWalletThatDoesNotExist() {
+        assertThrows(ResourceNotFoundException.class, () -> walletService.getById(1L));
     }
 }

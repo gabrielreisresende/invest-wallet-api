@@ -5,10 +5,8 @@ import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
-import com.resendegabriel.investwalletapi.service.ICustomerService;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -111,6 +109,25 @@ class WalletControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void shouldReturnCode403WhenTryToGetAllWalletsFromACustomerWithAdminRole() throws Exception {
+        mvc.perform(get("/wallets/customers/{customerId}", 1))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetAWalletByIdWithCustomerRole() throws Exception {
+        when(walletService.getById(anyLong())).thenReturn(walletResponseDTO);
+
+        mvc.perform(get("/wallets/{walletId}", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.walletId").value(1))
+                .andExpect(jsonPath("$.name").value("Wallet name"))
+                .andExpect(jsonPath("$.actives").isEmpty());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToGetAWalletByIdWithAdminRole() throws Exception {
         mvc.perform(get("/wallets/customers/{customerId}", 1))
                 .andExpect(status().isForbidden());
     }
