@@ -6,7 +6,6 @@ import com.resendegabriel.investwalletapi.domain.auth.enums.UserRole;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerUpdateDTO;
-import com.resendegabriel.investwalletapi.repository.CustomerRepository;
 import com.resendegabriel.investwalletapi.service.ICustomerService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,9 +40,6 @@ class CustomerControllerTest {
 
     @MockBean
     private ICustomerService customerService;
-
-    @MockBean
-    CustomerRepository customerRepository;
 
     private static CustomerRegisterDTO customerRegisterDTO;
 

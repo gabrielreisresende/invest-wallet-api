@@ -51,7 +51,8 @@ public class CustomerService implements ICustomerService {
         customerRepository.deleteById(customerId);
     }
 
-    private Customer findById(Long customerId) {
+    @Override
+    public Customer findById(Long customerId) {
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("There isn't any customer with this id. Id " + customerId));
     }
