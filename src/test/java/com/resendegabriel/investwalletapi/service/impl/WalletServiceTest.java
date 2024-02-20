@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -84,6 +85,20 @@ class WalletServiceTest {
         then(customerService).should().findById(anyLong());
         then(customerService).shouldHaveNoMoreInteractions();
         then(walletRepository).should().save(any(Wallet.class));
+        then(walletRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetAllWalletsFromACustomer() {
+        when(customerService.findById(anyLong())).thenReturn(customer);
+        when(walletRepository.findAllByCustomer_CustomerId(anyLong())).thenReturn(List.of(wallet));
+
+        var response = walletService.getAll(1L);
+
+        assertEquals(List.of(new WalletResponseDTO(wallet)), response);
+        then(customerService).should().findById(anyLong());
+        then(customerService).shouldHaveNoMoreInteractions();
+        then(walletRepository).should().findAllByCustomer_CustomerId(anyLong());
         then(walletRepository).shouldHaveNoMoreInteractions();
     }
 }

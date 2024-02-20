@@ -1,11 +1,14 @@
 package com.resendegabriel.investwalletapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.service.ICustomerService;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,9 +19,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,6 +44,8 @@ class WalletControllerTest {
 
     private static WalletResponseDTO walletResponseDTO;
 
+    private static Customer customer;
+
     @BeforeAll
     static void init() {
         walletRequestDTO = WalletRequestDTO.builder()
@@ -53,6 +61,10 @@ class WalletControllerTest {
                                 .customerId(1L)
                                 .build())
                 .actives(new ArrayList<>())
+                .build();
+
+        customer = Customer.builder()
+                .customerId(1L)
                 .build();
     }
 
@@ -81,6 +93,25 @@ class WalletControllerTest {
         mvc.perform(post("/wallets")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetAllWalletsFromACustomerWithCustomerRole() throws Exception {
+        when(walletService.getAll(anyLong())).thenReturn(List.of(walletResponseDTO));
+
+        mvc.perform(get("/wallets/customers/{customerId}", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].walletId").value(1))
+                .andExpect(jsonPath("$[0].name").value("Wallet name"))
+                .andExpect(jsonPath("$[0].actives").isEmpty());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToGetAllWalletsFromACustomerWithAdminRole() throws Exception {
+        mvc.perform(get("/wallets/customers/{customerId}", 1))
                 .andExpect(status().isForbidden());
     }
 }
