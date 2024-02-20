@@ -124,7 +124,7 @@ class WalletServiceTest {
     }
 
     @Test
-    void shouldUpdateAWalleName() {
+    void shouldUpdateAWalletName() {
         when(walletRepository.findById(anyLong())).thenReturn(Optional.of(wallet));
 
         var updateWalletDTO = new UpdateWalletDTO("New wallet name");
@@ -135,5 +135,25 @@ class WalletServiceTest {
         assertEquals(1L, response.walletId());
         then(walletRepository).should().findById(anyLong());
         then(walletRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundExceptionWhenTryToUpdateeByIdAWalletThatDoesNotExist() {
+        assertThrows(ResourceNotFoundException.class, () -> walletService.update(1L, new UpdateWalletDTO("new name")));
+    }
+
+    @Test
+    void shouldDeleteAWalletById() {
+        when(walletRepository.findById(anyLong())).thenReturn(Optional.of(wallet));
+
+        walletService.deleteById(1L);
+
+        then(walletRepository).should().deleteById(anyLong());
+        then(walletRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundExceptionWhenTryToDeleteByIdAWalletThatDoesNotExist() {
+        assertThrows(ResourceNotFoundException.class, () -> walletService.deleteById(1L));
     }
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -170,6 +171,20 @@ class WalletControllerTest {
         mvc.perform(put("/wallets/{walletId}", 1)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode204WhenDeleteAWalletWithCustomerRole() throws Exception {
+        mvc.perform(delete("/wallets/{walletId}", 1))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToDeleteAWalletWithAdminRole() throws Exception {
+        mvc.perform(delete("/wallets/{walletId}", 1))
                 .andExpect(status().isForbidden());
     }
 }
