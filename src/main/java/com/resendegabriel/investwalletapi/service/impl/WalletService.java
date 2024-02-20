@@ -3,6 +3,7 @@ package com.resendegabriel.investwalletapi.service.impl;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.WalletRepository;
 import com.resendegabriel.investwalletapi.service.ICustomerService;
 import com.resendegabriel.investwalletapi.service.IWalletService;
@@ -36,5 +37,11 @@ public class WalletService implements IWalletService {
                 .findAllByCustomer_CustomerId(customerId)
                 .stream().map(WalletResponseDTO::new)
                 .toList();
+    }
+
+    @Override
+    public WalletResponseDTO getById(Long walletId) {
+        return new WalletResponseDTO(walletRepository.findById(walletId)
+                .orElseThrow(() -> new ResourceNotFoundException("There is no wallet with this id. Id " + walletId)));
     }
 }

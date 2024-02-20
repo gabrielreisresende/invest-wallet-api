@@ -10,4 +10,6 @@ public interface IWalletService {
     WalletResponseDTO create(WalletRequestDTO walletRequestDTO);
 
     List<WalletResponseDTO> getAll(Long customerId);
+
+    WalletResponseDTO getById(Long walletId);
 }

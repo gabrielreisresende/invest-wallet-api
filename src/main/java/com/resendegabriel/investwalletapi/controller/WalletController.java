@@ -35,4 +35,9 @@ public class WalletController {
     public ResponseEntity<List<WalletResponseDTO>> getAll(@PathVariable Long customerId) {
         return ResponseEntity.ok().body(walletService.getAll(customerId));
     }
+
+    @GetMapping("/{walletId}")
+    public ResponseEntity<WalletResponseDTO> getById(@PathVariable Long walletId) {
+        return ResponseEntity.ok().body(walletService.getById(walletId));
+    }
 }
