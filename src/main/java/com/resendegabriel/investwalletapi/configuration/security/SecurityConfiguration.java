@@ -27,10 +27,11 @@ public class SecurityConfiguration {
     private static final String H2_DATABASE_URL = "/h2-console/**";
 
     private static final String CUSTOMER_ROLE = "CUSTOMER";
+    private static final String ADMIN_ROLE = "ADMIN";
 
     private static final String CUSTOMERS_ENDPOINT = "/customers/**";
-
     private static final String WALLETS_ENDPOINT = "/wallets/**";
+    private static final String ACTIVE_TYPE_ENDPOINT = "/active-types/**";
 
     private static final RequestMatcher[] AUTH_WHITE_LIST = {
             new AntPathRequestMatcher(H2_DATABASE_URL),
@@ -55,6 +56,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, CUSTOMERS_ENDPOINT).hasRole(CUSTOMER_ROLE)
 
                         .requestMatchers(WALLETS_ENDPOINT).hasRole(CUSTOMER_ROLE)
+
+                        .requestMatchers(ACTIVE_TYPE_ENDPOINT).hasRole(ADMIN_ROLE)
 
                         .anyRequest().authenticated())
 

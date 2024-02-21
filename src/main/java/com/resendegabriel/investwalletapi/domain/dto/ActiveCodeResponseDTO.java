@@ -4,13 +4,13 @@ import com.resendegabriel.investwalletapi.domain.ActiveCode;
 
 public record ActiveCodeResponseDTO(String activeCode,
 
-                                    ActiveTypeDTO activeType,
+                                    ActiveTypeResponseDTO activeType,
 
                                     ActiveSectorDTO activeSector) {
 
     public ActiveCodeResponseDTO(ActiveCode activeCode) {
         this(activeCode.getActiveCode(),
-                new ActiveTypeDTO(activeCode.getActiveType()),
+                new ActiveTypeResponseDTO(activeCode.getActiveType()),
                 new ActiveSectorDTO(activeCode.getActiveSector()));
 
     }
