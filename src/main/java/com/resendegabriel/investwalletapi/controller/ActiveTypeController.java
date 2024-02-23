@@ -1,12 +1,14 @@
 package com.resendegabriel.investwalletapi.controller;
 
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeResponseDTO;
 import com.resendegabriel.investwalletapi.service.IActiveTypeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +28,10 @@ public class ActiveTypeController {
         var activeTypeResponseDTO = activeTypeService.create(activeTypeRequestDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{activeTypeId}").buildAndExpand(activeTypeResponseDTO.activeTypeId()).toUri();
         return ResponseEntity.created(uri).body(activeTypeResponseDTO);
+    }
+
+    @PutMapping("/{activeTypeId}")
+    public ResponseEntity<ActiveTypeResponseDTO> updateActiveTypeName(@PathVariable Long activeTypeId, @RequestBody @Valid ActiveTypeRequestDTO activeTypeRequestDTO) {
+        return ResponseEntity.ok().body(activeTypeService.updateActiveTypeName(activeTypeId, activeTypeRequestDTO));
     }
 }

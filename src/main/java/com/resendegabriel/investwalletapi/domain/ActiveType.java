@@ -32,4 +32,8 @@ public class ActiveType {
     public ActiveType(ActiveTypeRequestDTO activeTypeRequestDTO) {
         this.activeType = activeTypeRequestDTO.activeType();
     }
+
+    public void updateActiveTypeName(String activeTypeName) {
+        this.activeType = activeTypeName;
+    }
 }
