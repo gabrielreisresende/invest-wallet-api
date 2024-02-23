@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +64,30 @@ class ActiveTypeControllerTest {
         String json = new ObjectMapper().writeValueAsString(activeTypeRequestDTO);
 
         mvc.perform(post("/active-types")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode200WhenUpdateAnActiveTypeWithAdminRole() throws Exception {
+        var activeTypeUpdateDTO = new ActiveTypeRequestDTO("New name");
+        String json = new ObjectMapper().writeValueAsString(activeTypeUpdateDTO);
+
+        mvc.perform(put("/active-types/{activeTypeId}", 1)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode403WhenTryToUpdateAnActiveTypeWithCustomerRole() throws Exception {
+        var activeTypeUpdateDTO = new ActiveTypeRequestDTO("New name");
+        String json = new ObjectMapper().writeValueAsString(activeTypeUpdateDTO);
+
+        mvc.perform(put("/active-types/{activeTypeId}", 1)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());

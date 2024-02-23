@@ -9,10 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +32,7 @@ class ActiveTypeServiceTest {
 
     private static ActiveTypeRequestDTO activeTypeRequestDTO;
 
+    @Spy
     private static ActiveType activeType;
 
     @BeforeAll
@@ -48,4 +54,18 @@ class ActiveTypeServiceTest {
         then(activeTypeRepository).should().save(any(ActiveType.class));
         then(activeTypeRepository).shouldHaveNoMoreInteractions();
     }
+
+    @Test
+    void shouldUpdateAnActiveType() {
+        var activeTypeUpdateDTO = new ActiveTypeRequestDTO("New name");
+        when(activeTypeRepository.findById(anyLong())).thenReturn(Optional.of(activeType));
+
+        var response = activeTypeService.updateActiveTypeName(1L, activeTypeUpdateDTO);
+
+        assertEquals(new ActiveTypeResponseDTO(activeType), response);
+        then(activeTypeRepository).should().findById(anyLong());
+        then(activeTypeRepository).shouldHaveNoMoreInteractions();
+        then(activeType).should().updateActiveTypeName(anyString());
+    }
+
 }
