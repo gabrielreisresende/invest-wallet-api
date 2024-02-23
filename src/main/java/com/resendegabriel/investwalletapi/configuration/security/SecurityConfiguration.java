@@ -57,7 +57,8 @@ public class SecurityConfiguration {
 
                         .requestMatchers(WALLETS_ENDPOINT).hasRole(CUSTOMER_ROLE)
 
-                        .requestMatchers(ACTIVE_TYPE_ENDPOINT).hasRole(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.POST, ACTIVE_TYPE_ENDPOINT).hasRole(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.PUT, ACTIVE_TYPE_ENDPOINT).hasRole(ADMIN_ROLE)
 
                         .anyRequest().authenticated())
 

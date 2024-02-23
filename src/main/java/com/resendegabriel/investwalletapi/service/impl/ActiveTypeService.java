@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ActiveTypeService implements IActiveTypeService {
 
@@ -33,5 +35,13 @@ public class ActiveTypeService implements IActiveTypeService {
     private ActiveType findActiveTypeEntity(Long activeTypeId) {
         return activeTypeRepository.findById(activeTypeId)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no active type with this id. Id " + activeTypeId));
+    }
+
+    @Override
+    public List<ActiveTypeResponseDTO> getAll() {
+        return activeTypeRepository.findAll()
+                .stream()
+                .map(ActiveTypeResponseDTO::new)
+                .toList();
     }
 }
