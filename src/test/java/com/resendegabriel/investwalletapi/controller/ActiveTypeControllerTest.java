@@ -14,8 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -91,5 +94,27 @@ class ActiveTypeControllerTest {
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode200WhenGetAllActiveTypesWithAdminRole() throws Exception {
+        when(activeTypeService.getAll()).thenReturn(List.of(activeTypeResponseDTO));
+
+        mvc.perform(get("/active-types"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].activeTypeId").value(activeTypeResponseDTO.activeTypeId()))
+                .andExpect(jsonPath("$[0].activeType").value(activeTypeResponseDTO.activeType()));
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetAllActiveTypesWithCustomerRole() throws Exception {
+        when(activeTypeService.getAll()).thenReturn(List.of(activeTypeResponseDTO));
+
+        mvc.perform(get("/active-types"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].activeTypeId").value(activeTypeResponseDTO.activeTypeId()))
+                .andExpect(jsonPath("$[0].activeType").value(activeTypeResponseDTO.activeType()));
     }
 }

@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -68,4 +70,15 @@ class ActiveTypeServiceTest {
         then(activeType).should().updateActiveTypeName(anyString());
     }
 
+
+    @Test
+    void shouldGetAllActiveTypes() {
+        when(activeTypeRepository.findAll()).thenReturn(List.of(activeType));
+
+        var response = activeTypeService.getAll();
+
+        assertEquals(List.of(new ActiveTypeResponseDTO(activeType)), response);
+        then(activeTypeRepository).should().findAll();
+        then(activeTypeRepository).shouldHaveNoMoreInteractions();
+    }
 }
