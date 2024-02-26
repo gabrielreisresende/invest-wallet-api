@@ -6,6 +6,7 @@ import com.resendegabriel.investwalletapi.service.IActiveTypeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,11 @@ public class ActiveTypeController {
     @GetMapping("/{activeTypeId}")
     public ResponseEntity<ActiveTypeResponseDTO> getById(@PathVariable Long activeTypeId) {
         return ResponseEntity.ok().body(activeTypeService.getById(activeTypeId));
+    }
+
+    @DeleteMapping("/{activeTypeId}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long activeTypeId) {
+        activeTypeService.deleteById(activeTypeId);
+        return ResponseEntity.noContent().build();
     }
 }

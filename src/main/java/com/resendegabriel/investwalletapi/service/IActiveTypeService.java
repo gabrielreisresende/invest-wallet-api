@@ -14,4 +14,6 @@ public interface IActiveTypeService {
     List<ActiveTypeResponseDTO> getAll();
 
     ActiveTypeResponseDTO getById(Long activeTypeId);
+
+    void deleteById(Long activeTypeId);
 }

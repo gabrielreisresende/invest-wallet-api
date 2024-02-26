@@ -49,4 +49,11 @@ public class ActiveTypeService implements IActiveTypeService {
     public ActiveTypeResponseDTO getById(Long activeTypeId) {
         return new ActiveTypeResponseDTO(findActiveTypeEntity(activeTypeId));
     }
+
+    @Override
+    @Transactional
+    public void deleteById(Long activeTypeId) {
+        findActiveTypeEntity(activeTypeId);
+        activeTypeRepository.deleteById(activeTypeId);
+    }
 }

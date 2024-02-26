@@ -59,6 +59,7 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.POST, ACTIVE_TYPE_ENDPOINT).hasRole(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.PUT, ACTIVE_TYPE_ENDPOINT).hasRole(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.DELETE, ACTIVE_TYPE_ENDPOINT).hasRole(ADMIN_ROLE)
 
                         .anyRequest().authenticated())
 
