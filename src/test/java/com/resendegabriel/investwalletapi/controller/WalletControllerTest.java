@@ -2,10 +2,10 @@ package com.resendegabriel.investwalletapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resendegabriel.investwalletapi.domain.Customer;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
-import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
-import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

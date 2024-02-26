@@ -1,7 +1,7 @@
 package com.resendegabriel.investwalletapi.domain;
 
-import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
-import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

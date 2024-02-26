@@ -1,8 +1,8 @@
 package com.resendegabriel.investwalletapi.service.impl;
 
 import com.resendegabriel.investwalletapi.domain.ActiveType;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveTypeRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypeResponseDTO;
 import com.resendegabriel.investwalletapi.repository.ActiveTypeRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

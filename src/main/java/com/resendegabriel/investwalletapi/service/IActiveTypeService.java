@@ -1,7 +1,7 @@
 package com.resendegabriel.investwalletapi.service;
 
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveTypeRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypeResponseDTO;
 
 import java.util.List;
 

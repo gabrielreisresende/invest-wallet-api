@@ -1,10 +1,7 @@
 package com.resendegabriel.investwalletapi.service;
 
-import com.resendegabriel.investwalletapi.domain.dto.ActiveSectorRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveSectorResponseDTO;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeResponseDTO;
-import jakarta.validation.Valid;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveSectorRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveSectorResponseDTO;
 
 import java.util.List;
 

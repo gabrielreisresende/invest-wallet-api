@@ -1,6 +1,6 @@
 package com.resendegabriel.investwalletapi.domain;
 
-import com.resendegabriel.investwalletapi.domain.dto.ActiveSectorRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveSectorRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

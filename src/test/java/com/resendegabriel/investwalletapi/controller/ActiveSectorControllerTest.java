@@ -1,10 +1,9 @@
 package com.resendegabriel.investwalletapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveSectorRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveSectorResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveSectorRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveSectorResponseDTO;
 import com.resendegabriel.investwalletapi.service.IActiveSectorService;
-import com.resendegabriel.investwalletapi.service.IActiveTypeService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

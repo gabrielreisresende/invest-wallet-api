@@ -1,8 +1,8 @@
 package com.resendegabriel.investwalletapi.controller;
 
-import com.resendegabriel.investwalletapi.domain.dto.UpdateWalletDTO;
-import com.resendegabriel.investwalletapi.domain.dto.WalletRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

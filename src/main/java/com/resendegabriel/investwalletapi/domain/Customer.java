@@ -1,8 +1,8 @@
 package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.auth.User;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.CustomerRegisterDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.CustomerUpdateDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

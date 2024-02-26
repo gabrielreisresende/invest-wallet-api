@@ -1,9 +1,9 @@
 package com.resendegabriel.investwalletapi.service;
 
 import com.resendegabriel.investwalletapi.domain.Customer;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.CustomerRegisterDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.CustomerUpdateDTO;
 
 public interface ICustomerService {
 

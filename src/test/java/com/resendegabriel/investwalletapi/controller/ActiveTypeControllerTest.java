@@ -1,8 +1,8 @@
 package com.resendegabriel.investwalletapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveTypeRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypeResponseDTO;
 import com.resendegabriel.investwalletapi.service.IActiveTypeService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

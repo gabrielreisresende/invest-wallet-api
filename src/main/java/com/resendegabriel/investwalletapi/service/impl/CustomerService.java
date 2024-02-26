@@ -1,9 +1,9 @@
 package com.resendegabriel.investwalletapi.service.impl;
 
 import com.resendegabriel.investwalletapi.domain.Customer;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerRegisterDTO;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerResponseDTO;
-import com.resendegabriel.investwalletapi.domain.dto.CustomerUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.CustomerRegisterDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.CustomerUpdateDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.CustomerRepository;
 import com.resendegabriel.investwalletapi.service.ICustomerService;

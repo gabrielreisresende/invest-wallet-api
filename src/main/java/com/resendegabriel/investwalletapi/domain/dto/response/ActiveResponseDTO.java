@@ -1,7 +1,6 @@
-package com.resendegabriel.investwalletapi.domain.dto;
+package com.resendegabriel.investwalletapi.domain.dto.response;
 
 import com.resendegabriel.investwalletapi.domain.Active;
-import com.resendegabriel.investwalletapi.domain.ActiveCode;
 
 import java.math.BigDecimal;
 

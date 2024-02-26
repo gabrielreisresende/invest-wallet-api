@@ -1,4 +1,4 @@
-package com.resendegabriel.investwalletapi.domain.dto;
+package com.resendegabriel.investwalletapi.domain.dto.response;
 
 import com.resendegabriel.investwalletapi.domain.ActiveType;
 
