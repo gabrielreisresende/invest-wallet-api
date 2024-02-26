@@ -41,4 +41,9 @@ public class ActiveTypeController {
     public ResponseEntity<List<ActiveTypeResponseDTO>> getAll() {
         return ResponseEntity.ok().body(activeTypeService.getAll());
     }
+
+    @GetMapping("/{activeTypeId}")
+    public ResponseEntity<ActiveTypeResponseDTO> getById(@PathVariable Long activeTypeId) {
+        return ResponseEntity.ok().body(activeTypeService.getById(activeTypeId));
+    }
 }

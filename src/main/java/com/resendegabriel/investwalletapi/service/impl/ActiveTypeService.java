@@ -44,4 +44,9 @@ public class ActiveTypeService implements IActiveTypeService {
                 .map(ActiveTypeResponseDTO::new)
                 .toList();
     }
+
+    @Override
+    public ActiveTypeResponseDTO getById(Long activeTypeId) {
+        return new ActiveTypeResponseDTO(findActiveTypeEntity(activeTypeId));
+    }
 }

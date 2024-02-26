@@ -12,4 +12,6 @@ public interface IActiveTypeService {
     ActiveTypeResponseDTO updateActiveTypeName(Long activeTypeId, ActiveTypeRequestDTO activeTypeRequestDTO);
 
     List<ActiveTypeResponseDTO> getAll();
+
+    ActiveTypeResponseDTO getById(Long activeTypeId);
 }
