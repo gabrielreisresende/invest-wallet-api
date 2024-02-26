@@ -1,11 +1,14 @@
 package com.resendegabriel.investwalletapi.domain;
 
+import com.resendegabriel.investwalletapi.domain.dto.ActiveTypeRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +18,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ActiveType {
 
     @Id
@@ -23,4 +28,12 @@ public class ActiveType {
 
     @Column(nullable = false, length = 50, unique = true)
     private String activeType;
+
+    public ActiveType(ActiveTypeRequestDTO activeTypeRequestDTO) {
+        this.activeType = activeTypeRequestDTO.activeType();
+    }
+
+    public void updateActiveTypeName(String activeTypeName) {
+        this.activeType = activeTypeName;
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
 
 @RestControllerAdvice
@@ -25,6 +26,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<StandardError> methodArgumentNotValidExceptionHandler(ResourceNotFoundException ex, HttpServletRequest request) {
         return genericExceptionHandler(ex, request, "Resource Not found", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<StandardError> methodArgumentNotValidExceptionHandler(SQLIntegrityConstraintViolationException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Unique value violation", HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<StandardError> genericExceptionHandler(Exception ex, HttpServletRequest request, String error, HttpStatus status) {

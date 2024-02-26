@@ -54,7 +54,7 @@ public class User implements UserDetails {
     public User(String email, String encryptedPassword, UserRole role) {
         this.email = email;
         this.password = encryptedPassword;
-        this.role = UserRole.CUSTOMER;
+        this.role = role;
     }
 
     @Override

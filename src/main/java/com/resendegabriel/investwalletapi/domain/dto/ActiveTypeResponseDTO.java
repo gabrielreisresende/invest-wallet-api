@@ -2,11 +2,11 @@ package com.resendegabriel.investwalletapi.domain.dto;
 
 import com.resendegabriel.investwalletapi.domain.ActiveType;
 
-public record ActiveTypeDTO(Long activeTypeId,
+public record ActiveTypeResponseDTO(Long activeTypeId,
 
-                            String activeType) {
+                                    String activeType) {
 
-    public ActiveTypeDTO(ActiveType activeType) {
+    public ActiveTypeResponseDTO(ActiveType activeType) {
         this(
                 activeType.getActiveTypeId(),
                 activeType.getActiveType()
