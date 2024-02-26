@@ -6,12 +6,12 @@ public record ActiveCodeResponseDTO(String activeCode,
 
                                     ActiveTypeResponseDTO activeType,
 
-                                    ActiveSectorDTO activeSector) {
+                                    ActiveSectorResponseDTO activeSector) {
 
     public ActiveCodeResponseDTO(ActiveCode activeCode) {
         this(activeCode.getActiveCode(),
                 new ActiveTypeResponseDTO(activeCode.getActiveType()),
-                new ActiveSectorDTO(activeCode.getActiveSector()));
+                new ActiveSectorResponseDTO(activeCode.getActiveSector()));
 
     }
 }
