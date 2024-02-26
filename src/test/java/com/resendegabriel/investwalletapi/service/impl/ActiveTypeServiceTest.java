@@ -90,4 +90,15 @@ class ActiveTypeServiceTest {
         then(activeTypeRepository).should().findById(anyLong());
         then(activeTypeRepository).shouldHaveNoMoreInteractions();
     }
+
+    @Test
+    void shouldDeleteByIdAnActiveType() {
+        when(activeTypeRepository.findById(anyLong())).thenReturn(Optional.of(activeType));
+
+        activeTypeService.deleteById(1L);
+
+        then(activeTypeRepository).should().findById(anyLong());
+        then(activeTypeRepository).should().deleteById(anyLong());
+        then(activeTypeRepository).shouldHaveNoMoreInteractions();
+    }
 }

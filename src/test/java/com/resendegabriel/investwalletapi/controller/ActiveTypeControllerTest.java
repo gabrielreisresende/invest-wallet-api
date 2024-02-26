@@ -19,6 +19,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -139,5 +140,19 @@ class ActiveTypeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.activeTypeId").value(activeTypeResponseDTO.activeTypeId()))
                 .andExpect(jsonPath("$.activeType").value(activeTypeResponseDTO.activeType()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode204WhenDeleteByIdAnActiveTypeWithAdminRole() throws Exception {
+        mvc.perform(delete("/active-types/{activeTypeId}", 1))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode403WhenTryToDeleteByIdAnActiveTypeWithCustomerRole() throws Exception {
+        mvc.perform(delete("/active-types/{activeTypeId}", 1))
+                .andExpect(status().isForbidden());
     }
 }
