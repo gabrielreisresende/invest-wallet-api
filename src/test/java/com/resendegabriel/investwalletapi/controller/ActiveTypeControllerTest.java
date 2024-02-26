@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -116,5 +117,27 @@ class ActiveTypeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].activeTypeId").value(activeTypeResponseDTO.activeTypeId()))
                 .andExpect(jsonPath("$[0].activeType").value(activeTypeResponseDTO.activeType()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode200WhenGetByIdAnActiveTypeWithAdminRole() throws Exception {
+        when(activeTypeService.getById(anyLong())).thenReturn(activeTypeResponseDTO);
+
+        mvc.perform(get("/active-types/{activeTypeId}", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.activeTypeId").value(activeTypeResponseDTO.activeTypeId()))
+                .andExpect(jsonPath("$.activeType").value(activeTypeResponseDTO.activeType()));
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetByIdAnActiveTypeWithCustomerRole() throws Exception {
+        when(activeTypeService.getById(anyLong())).thenReturn(activeTypeResponseDTO);
+
+        mvc.perform(get("/active-types/{activeTypeId}", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.activeTypeId").value(activeTypeResponseDTO.activeTypeId()))
+                .andExpect(jsonPath("$.activeType").value(activeTypeResponseDTO.activeType()));
     }
 }

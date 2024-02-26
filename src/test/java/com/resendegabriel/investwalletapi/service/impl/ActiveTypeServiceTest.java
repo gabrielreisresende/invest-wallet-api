@@ -12,9 +12,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -70,7 +69,6 @@ class ActiveTypeServiceTest {
         then(activeType).should().updateActiveTypeName(anyString());
     }
 
-
     @Test
     void shouldGetAllActiveTypes() {
         when(activeTypeRepository.findAll()).thenReturn(List.of(activeType));
@@ -79,6 +77,17 @@ class ActiveTypeServiceTest {
 
         assertEquals(List.of(new ActiveTypeResponseDTO(activeType)), response);
         then(activeTypeRepository).should().findAll();
+        then(activeTypeRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetByIdAnActiveType() {
+        when(activeTypeRepository.findById(anyLong())).thenReturn(Optional.of(activeType));
+
+        var response = activeTypeService.getById(1L);
+
+        assertEquals(new ActiveTypeResponseDTO(activeType), response);
+        then(activeTypeRepository).should().findById(anyLong());
         then(activeTypeRepository).shouldHaveNoMoreInteractions();
     }
 }
