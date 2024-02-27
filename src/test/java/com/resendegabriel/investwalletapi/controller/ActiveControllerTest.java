@@ -2,6 +2,7 @@ package com.resendegabriel.investwalletapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveCodeResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +40,8 @@ class ActiveControllerTest {
     private static ActiveRequestDTO activeRequestDTO;
 
     private static ActiveResponseDTO activeResponseDTO;
+
+    private static ActiveUpdateDTO activeUpdateDTO;
 
     @BeforeAll
     static void init() {
@@ -60,6 +64,11 @@ class ActiveControllerTest {
                         .builder()
                         .walletId(activeRequestDTO.walletId())
                         .build())
+                .build();
+
+        activeUpdateDTO = ActiveUpdateDTO.builder()
+                .quantity(150)
+                .averageValue(new BigDecimal("9.99"))
                 .build();
     }
 
@@ -88,6 +97,28 @@ class ActiveControllerTest {
         String json = new ObjectMapper().writeValueAsString(activeRequestDTO);
 
         mvc.perform(post("/actives")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenUpdateAnActiveWithCustomerRole() throws Exception {
+        String json = new ObjectMapper().writeValueAsString(activeUpdateDTO);
+
+        mvc.perform(put("/actives/{activeId}", 1)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToUpdateAnActiveWithAdminRole() throws Exception {
+        String json = new ObjectMapper().writeValueAsString(activeUpdateDTO);
+
+        mvc.perform(put("/actives/{activeId}", 1)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());

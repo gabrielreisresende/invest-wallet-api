@@ -8,6 +8,7 @@ import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
 import com.resendegabriel.investwalletapi.repository.ActiveRepository;
 import com.resendegabriel.investwalletapi.service.IActiveCodeService;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,6 +53,8 @@ class ActiveServiceTest {
     private static Wallet wallet;
 
     private static ActiveCode activeCode;
+
+    private static ActiveUpdateDTO activeUpdateDTO;
 
     @BeforeAll
     static void init() {
@@ -84,6 +88,11 @@ class ActiveServiceTest {
                 .activeCode(activeCode)
                 .wallet(wallet)
                 .build();
+
+        activeUpdateDTO = ActiveUpdateDTO.builder()
+                .quantity(150)
+                .averageValue(new BigDecimal("9.99"))
+                .build();
     }
 
     @Test
@@ -103,4 +112,14 @@ class ActiveServiceTest {
         then(activeCodeService).shouldHaveNoMoreInteractions();
     }
 
+    @Test
+    void shouldUpdateAnActive() {
+        when(activeRepository.findById(anyLong())).thenReturn(Optional.ofNullable(active));
+
+        var response = activeService.update(1L, activeUpdateDTO);
+
+        assertEquals(new ActiveResponseDTO(active), response);
+        then(activeRepository).should().findById(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
 }
