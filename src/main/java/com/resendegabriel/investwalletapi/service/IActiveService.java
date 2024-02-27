@@ -10,4 +10,6 @@ public interface IActiveService {
     ActiveResponseDTO update(Long activeId, ActiveUpdateDTO activeUpdateDTO);
 
     void deleteById(Long activeId);
+
+    ActiveResponseDTO getById(Long activeId);
 }

@@ -49,6 +49,11 @@ public class ActiveService implements IActiveService {
         activeRepository.deleteById(activeId);
     }
 
+    @Override
+    public ActiveResponseDTO getById(Long activeId) {
+        return new ActiveResponseDTO(findAnActiveEntityById(activeId));
+    }
+
     private Active findAnActiveEntityById(Long activeId) {
         return activeRepository.findById(activeId)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no active with this id. Id " + activeId));
