@@ -1,7 +1,9 @@
 package com.resendegabriel.investwalletapi.domain.dto.response;
 
 import com.resendegabriel.investwalletapi.domain.ActiveCode;
+import lombok.Builder;
 
+@Builder
 public record ActiveCodeResponseDTO(String activeCode,
 
                                     ActiveTypeResponseDTO activeType,

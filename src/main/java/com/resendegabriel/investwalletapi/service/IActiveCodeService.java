@@ -1,5 +1,6 @@
 package com.resendegabriel.investwalletapi.service;
 
+import com.resendegabriel.investwalletapi.domain.ActiveCode;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveCodeRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveCodeResponseDTO;
 
@@ -14,4 +15,6 @@ public interface IActiveCodeService {
     ActiveCodeResponseDTO getByCode(String activeCode);
 
     void delete(String activeCode);
+
+    ActiveCode findActiveCodeEntity(String activeCode);
 }

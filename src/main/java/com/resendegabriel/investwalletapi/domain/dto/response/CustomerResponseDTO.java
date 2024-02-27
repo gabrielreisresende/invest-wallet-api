@@ -1,6 +1,5 @@
 package com.resendegabriel.investwalletapi.domain.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.auth.dto.UserResponseDTO;
 import lombok.Builder;
@@ -23,8 +22,7 @@ public record CustomerResponseDTO(Long customerId,
 
                                   UserResponseDTO user,
 
-                                  @JsonIgnoreProperties(value = {"customerResponseDTO, actives"})
-                                  List<WalletResponseDTO> wallets) {
+                                  List<WalletSimpleDTO> wallets) {
 
     public CustomerResponseDTO(Customer customer) {
         this(
@@ -35,7 +33,10 @@ public record CustomerResponseDTO(Long customerId,
                 customer.getPhone(),
                 customer.getBirthDate(),
                 new UserResponseDTO(customer.getUser()),
-                customer.getWallets().stream().map(WalletResponseDTO::new).toList()
+                customer.getWallets()
+                        .stream()
+                        .map(WalletSimpleDTO::new)
+                        .toList()
         );
     }
 }

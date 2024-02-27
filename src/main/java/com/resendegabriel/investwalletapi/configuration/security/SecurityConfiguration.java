@@ -34,6 +34,7 @@ public class SecurityConfiguration {
     private static final String ACTIVE_TYPE_ENDPOINT = "/active-types/**";
     private static final String ACTIVE_SECTOR_ENDPOINT = "/active-sectors/**";
     private static final String ACTIVE_CODE_ENDPOINT = "/active-codes/**";
+    private static final String ACTIVES_ENDPOINT = "/actives/**";
 
     private static final RequestMatcher[] AUTH_WHITE_LIST = {
             new AntPathRequestMatcher(H2_DATABASE_URL),
@@ -70,6 +71,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, ACTIVE_CODE_ENDPOINT).hasRole(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.PUT, ACTIVE_CODE_ENDPOINT).hasRole(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.DELETE, ACTIVE_CODE_ENDPOINT).hasRole(ADMIN_ROLE)
+
+                        .requestMatchers(ACTIVES_ENDPOINT).hasRole(CUSTOMER_ROLE)
 
                         .anyRequest().authenticated())
 
