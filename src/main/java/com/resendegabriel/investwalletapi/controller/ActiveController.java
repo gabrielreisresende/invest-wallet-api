@@ -7,6 +7,7 @@ import com.resendegabriel.investwalletapi.service.IActiveService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,5 +39,11 @@ public class ActiveController {
     @PutMapping("/{activeId}")
     public ResponseEntity<ActiveResponseDTO> update(@PathVariable Long activeId, @RequestBody ActiveUpdateDTO activeUpdateDTO) {
         return ResponseEntity.ok().body(activeService.update(activeId, activeUpdateDTO));
+    }
+
+    @DeleteMapping("/{activeId}")
+    public ResponseEntity<Void> update(@PathVariable Long activeId) {
+        activeService.deleteById(activeId);
+        return ResponseEntity.noContent().build();
     }
 }

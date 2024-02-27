@@ -8,4 +8,6 @@ public interface IActiveService {
     ActiveResponseDTO create(ActiveRequestDTO activeRequestDTO);
 
     ActiveResponseDTO update(Long activeId, ActiveUpdateDTO activeUpdateDTO);
+
+    void deleteById(Long activeId);
 }
