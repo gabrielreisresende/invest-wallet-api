@@ -37,7 +37,7 @@ public class ActiveController {
     }
 
     @PutMapping("/{activeId}")
-    public ResponseEntity<ActiveResponseDTO> update(@PathVariable Long activeId, @RequestBody ActiveUpdateDTO activeUpdateDTO) {
+    public ResponseEntity<ActiveResponseDTO> update(@PathVariable Long activeId, @RequestBody @Valid ActiveUpdateDTO activeUpdateDTO) {
         return ResponseEntity.ok().body(activeService.update(activeId, activeUpdateDTO));
     }
 
