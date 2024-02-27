@@ -20,8 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -136,6 +138,27 @@ class ActiveControllerTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturnCode403WhenTryToDeleteAnActiveWithAdminRole() throws Exception {
         mvc.perform(delete("/actives/{activeId}", 1))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetAnActiveByIdWithCustomerRole() throws Exception {
+        when(activeService.getById(anyLong())).thenReturn(activeResponseDTO);
+
+        mvc.perform(get("/actives/{activeId}", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.activeId").value(activeResponseDTO.activeId()))
+                .andExpect(jsonPath("$.quantity").value(activeRequestDTO.quantity()))
+                .andExpect(jsonPath("$.averageValue").value(activeRequestDTO.averageValue()))
+                .andExpect(jsonPath("$.activeCode.activeCode").value(activeRequestDTO.activeCode()))
+                .andExpect(jsonPath("$.wallet.walletId").value(activeRequestDTO.walletId()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToGetAnActiveByIdWithCAdminRole() throws Exception {
+        mvc.perform(get("/actives/{activeId}", 1))
                 .andExpect(status().isForbidden());
     }
 }

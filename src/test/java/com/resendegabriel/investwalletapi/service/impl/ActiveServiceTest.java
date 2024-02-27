@@ -133,4 +133,15 @@ class ActiveServiceTest {
         then(activeRepository).should().deleteById(anyLong());
         then(activeRepository).shouldHaveNoMoreInteractions();
     }
+
+    @Test
+    void shouldGetAnActiveById() {
+        when(activeRepository.findById(anyLong())).thenReturn(Optional.ofNullable(active));
+
+        var response = activeService.getById(1L);
+
+        assertEquals(new ActiveResponseDTO(active), response);
+        then(activeRepository).should().findById(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
 }
