@@ -61,7 +61,8 @@ public class WalletService implements IWalletService {
         walletRepository.deleteById(walletId);
     }
 
-    private Wallet findWalletEntityById(Long walletId) {
+    @Override
+    public Wallet findWalletEntityById(Long walletId) {
         return walletRepository.findById(walletId)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no wallet with this id. Id " + walletId));
     }

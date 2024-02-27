@@ -45,7 +45,8 @@ public class ActiveCodeService implements IActiveCodeService {
         activeCodeRepository.delete(activeCodeEntity);
     }
 
-    private ActiveCode findActiveCodeEntity(String activeCode) {
+    @Override
+    public ActiveCode findActiveCodeEntity(String activeCode) {
         return activeCodeRepository.findByActiveCode(activeCode).
                 orElseThrow(() -> new ResourceNotFoundException("There is no active code with this code. Code " + activeCode));
     }
