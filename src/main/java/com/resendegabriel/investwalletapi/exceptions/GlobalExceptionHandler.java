@@ -1,5 +1,6 @@
 package com.resendegabriel.investwalletapi.exceptions;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<StandardError> methodArgumentNotValidExceptionHandler(ResourceNotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<StandardError> resourceNotFoundExceptionHandler(ResourceNotFoundException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Resource Not found", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<StandardError> entityNotFoundExceptionHandler(EntityNotFoundException ex, HttpServletRequest request) {
         return genericExceptionHandler(ex, request, "Resource Not found", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<StandardError> methodArgumentNotValidExceptionHandler(SQLIntegrityConstraintViolationException ex, HttpServletRequest request) {
+    public ResponseEntity<StandardError> sqlIntegrityConstraintViolationExceptionHandler(SQLIntegrityConstraintViolationException ex, HttpServletRequest request) {
         return genericExceptionHandler(ex, request, "Unique value violation", HttpStatus.BAD_REQUEST);
     }
 

@@ -9,9 +9,10 @@ public record ActiveCodeResponseDTO(String activeCode,
                                     ActiveSectorResponseDTO activeSector) {
 
     public ActiveCodeResponseDTO(ActiveCode activeCode) {
-        this(activeCode.getActiveCode(),
+        this(
+                activeCode.getActiveCode(),
                 new ActiveTypeResponseDTO(activeCode.getActiveType()),
-                new ActiveSectorResponseDTO(activeCode.getActiveSector()));
-
+                new ActiveSectorResponseDTO(activeCode.getActiveSector())
+        );
     }
 }

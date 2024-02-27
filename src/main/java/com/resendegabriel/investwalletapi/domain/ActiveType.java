@@ -1,6 +1,7 @@
 package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveTypeRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypeResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,11 @@ public class ActiveType {
 
     public ActiveType(ActiveTypeRequestDTO activeTypeRequestDTO) {
         this.activeType = activeTypeRequestDTO.activeType();
+    }
+
+    public ActiveType(ActiveTypeResponseDTO activeTypeResponseDTO) {
+        this.activeTypeId = activeTypeResponseDTO.activeTypeId();
+        this.activeType = activeTypeResponseDTO.activeType();
     }
 
     public void updateActiveTypeName(String activeTypeName) {

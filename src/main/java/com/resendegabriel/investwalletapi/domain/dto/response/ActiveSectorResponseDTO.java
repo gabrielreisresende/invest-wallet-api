@@ -1,11 +1,12 @@
 package com.resendegabriel.investwalletapi.domain.dto.response;
 
 import com.resendegabriel.investwalletapi.domain.ActiveSector;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record ActiveSectorResponseDTO(Long activeSectorId,
+public record ActiveSectorResponseDTO(@NotNull Long activeSectorId,
 
-                                      String activeSector) {
-
+                                      @NotBlank String activeSector) {
     public ActiveSectorResponseDTO(ActiveSector activeSector) {
         this(
                 activeSector.getActiveSectorId(),
