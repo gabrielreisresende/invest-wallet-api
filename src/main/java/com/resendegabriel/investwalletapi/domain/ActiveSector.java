@@ -1,6 +1,7 @@
 package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveSectorRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveSectorResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,11 @@ public class ActiveSector {
 
     public ActiveSector(ActiveSectorRequestDTO activeSectorRequestDTO) {
         this.activeSector = activeSectorRequestDTO.activeSector();
+    }
+
+    public ActiveSector(ActiveSectorResponseDTO activeSectorResponseDTO) {
+        this.activeSectorId = activeSectorResponseDTO.activeSectorId();
+        this.activeSector = activeSectorResponseDTO.activeSector();
     }
 
     public void updateActiveSectorName(String newActiveSectorName) {
