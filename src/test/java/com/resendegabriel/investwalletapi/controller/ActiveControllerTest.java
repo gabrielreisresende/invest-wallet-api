@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -121,6 +122,20 @@ class ActiveControllerTest {
         mvc.perform(put("/actives/{activeId}", 1)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode204WhenDeleteAnActiveWithCustomerRole() throws Exception {
+        mvc.perform(delete("/actives/{activeId}", 1))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToDeleteAnActiveWithAdminRole() throws Exception {
+        mvc.perform(delete("/actives/{activeId}", 1))
                 .andExpect(status().isForbidden());
     }
 }
