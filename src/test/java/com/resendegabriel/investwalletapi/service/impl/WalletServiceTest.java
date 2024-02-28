@@ -161,7 +161,7 @@ class WalletServiceTest {
         var activesReportDTO = ActivesReportDTO.builder()
                 .activeId(1L)
                 .activeCode("MXRF11")
-                .activePercent(new BigDecimal("100.0"))
+                .activePercentage(new BigDecimal("100.0"))
                 .activeTotalValue(new BigDecimal("100.0"))
                 .build();
         var walletReportDTO = WalletActivesReportDTO.builder()

@@ -198,7 +198,7 @@ class WalletControllerTest {
         var activesReportDTO = ActivesReportDTO.builder()
                 .activeId(1L)
                 .activeCode("MXRF11")
-                .activePercent(new BigDecimal("100.0"))
+                .activePercentage(new BigDecimal("100.0"))
                 .activeTotalValue(new BigDecimal("100.0"))
                 .build();
         var walletReportDTO = WalletActivesReportDTO.builder()
@@ -220,7 +220,7 @@ class WalletControllerTest {
                 .andExpect(jsonPath("$.actives[0].activeId").value(walletReportDTO.actives().get(0).getActiveId()))
                 .andExpect(jsonPath("$.actives[0].activeCode").value(walletReportDTO.actives().get(0).getActiveCode()))
                 .andExpect(jsonPath("$.actives[0].activeTotalValue").value(walletReportDTO.actives().get(0).getActiveTotalValue()))
-                .andExpect(jsonPath("$.actives[0].activePercent").value(walletReportDTO.actives().get(0).getActivePercent()));
+                .andExpect(jsonPath("$.actives[0].activePercentage").value(walletReportDTO.actives().get(0).getActivePercentage()));
     }
 
     @Test

@@ -19,7 +19,7 @@ public class ActivesReportDTO {
 
     private BigDecimal activeTotalValue;
 
-    private BigDecimal activePercent;
+    private BigDecimal activePercentage;
 
     public ActivesReportDTO(Long activeId, String activeCode, BigDecimal activeTotalValue) {
         this.activeId = activeId;

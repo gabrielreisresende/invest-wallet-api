@@ -78,7 +78,7 @@ public class ActiveService implements IActiveService {
 
     private void setEachActivePercent(List<ActivesReportDTO> activesReportDTO, BigDecimal walletTotalValue) {
         activesReportDTO.forEach(active ->
-                active.setActivePercent(
+                active.setActivePercentage(
                         active.getActiveTotalValue()
                                 .multiply(new BigDecimal("100"))
                                 .divide(walletTotalValue, 2, RoundingMode.HALF_UP)));
