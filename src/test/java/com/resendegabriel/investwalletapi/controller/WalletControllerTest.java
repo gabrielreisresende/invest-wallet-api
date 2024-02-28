@@ -2,10 +2,13 @@ package com.resendegabriel.investwalletapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resendegabriel.investwalletapi.domain.Customer;
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,6 +189,44 @@ class WalletControllerTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturnCode403WhenTryToDeleteAWalletWithAdminRole() throws Exception {
         mvc.perform(delete("/wallets/{walletId}", 1))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetAWalletActivesReportWithCustomerRole() throws Exception {
+        var activesReportDTO = ActivesReportDTO.builder()
+                .activeId(1L)
+                .activeCode("MXRF11")
+                .activePercent(new BigDecimal("100.0"))
+                .activeTotalValue(new BigDecimal("100.0"))
+                .build();
+        var walletReportDTO = WalletActivesReportDTO.builder()
+                .wallet(WalletSimpleDTO.builder()
+                        .walletId(1L)
+                        .name("wallet name")
+                        .build())
+                .walletTotalValue(new BigDecimal("100.0"))
+                .actives(List.of(activesReportDTO))
+                .build();
+
+        when(walletService.getWalletActivesReport(anyLong())).thenReturn(walletReportDTO);
+
+        mvc.perform(get("/wallets/{walletId}/actives/details", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.wallet.walletId").value(walletReportDTO.wallet().walletId()))
+                .andExpect(jsonPath("$.wallet.name").value(walletReportDTO.wallet().name()))
+                .andExpect(jsonPath("$.walletTotalValue").value(walletReportDTO.walletTotalValue()))
+                .andExpect(jsonPath("$.actives[0].activeId").value(walletReportDTO.actives().get(0).getActiveId()))
+                .andExpect(jsonPath("$.actives[0].activeCode").value(walletReportDTO.actives().get(0).getActiveCode()))
+                .andExpect(jsonPath("$.actives[0].activeTotalValue").value(walletReportDTO.actives().get(0).getActiveTotalValue()))
+                .andExpect(jsonPath("$.actives[0].activePercent").value(walletReportDTO.actives().get(0).getActivePercent()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToGetAWalletActivesReportWithAdminRole() throws Exception {
+        mvc.perform(get("/wallets/{walletId}/actives/details", 1))
                 .andExpect(status().isForbidden());
     }
 }

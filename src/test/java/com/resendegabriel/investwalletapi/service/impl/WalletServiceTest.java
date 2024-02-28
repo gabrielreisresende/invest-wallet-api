@@ -3,12 +3,15 @@ package com.resendegabriel.investwalletapi.service.impl;
 import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.User;
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.WalletRepository;
+import com.resendegabriel.investwalletapi.service.IActiveService;
 import com.resendegabriel.investwalletapi.service.ICustomerService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
@@ -40,9 +45,10 @@ class WalletServiceTest {
     @Mock
     private ICustomerService customerService;
 
-    private static WalletRequestDTO walletRequestDTO;
+    @Mock
+    private IActiveService activeService;
 
-    private static WalletResponseDTO walletResponseDTO;
+    private static WalletRequestDTO walletRequestDTO;
 
     private static Wallet wallet;
 
@@ -67,13 +73,6 @@ class WalletServiceTest {
                 .walletId(1L)
                 .customer(customer)
                 .name(walletRequestDTO.name())
-                .actives(new ArrayList<>())
-                .build();
-
-        walletResponseDTO = WalletResponseDTO.builder()
-                .walletId(wallet.getWalletId())
-                .name(walletRequestDTO.name())
-                .customer(new CustomerResponseDTO(customer))
                 .actives(new ArrayList<>())
                 .build();
     }
@@ -155,5 +154,34 @@ class WalletServiceTest {
     @Test
     void shouldThrowResourceNotFoundExceptionWhenTryToDeleteByIdAWalletThatDoesNotExist() {
         assertThrows(ResourceNotFoundException.class, () -> walletService.deleteById(1L));
+    }
+
+    @Test
+    void shouldReturnAWalletActivesReport() {
+        var activesReportDTO = ActivesReportDTO.builder()
+                .activeId(1L)
+                .activeCode("MXRF11")
+                .activePercent(new BigDecimal("100.0"))
+                .activeTotalValue(new BigDecimal("100.0"))
+                .build();
+        var walletReportDTO = WalletActivesReportDTO.builder()
+                .wallet(WalletSimpleDTO.builder()
+                        .walletId(wallet.getWalletId())
+                        .name(wallet.getName())
+                        .build())
+                .walletTotalValue(new BigDecimal("100.0"))
+                .actives(List.of(activesReportDTO))
+                .build();
+
+        when(walletRepository.findById(anyLong())).thenReturn(Optional.of(wallet));
+        when(activeService.getActivesReport(anyLong())).thenReturn(List.of(activesReportDTO));
+        when(activeService.getWalletTotalValue(anyList())).thenReturn(new BigDecimal("100.0"));
+
+        var response = walletService.getWalletActivesReport(1L);
+
+        assertEquals(walletReportDTO, response);
+        then(activeService).should().getActivesReport(anyLong());
+        then(activeService).should().getWalletTotalValue(anyList());
+        then(activeService).shouldHaveNoMoreInteractions();
     }
 }
