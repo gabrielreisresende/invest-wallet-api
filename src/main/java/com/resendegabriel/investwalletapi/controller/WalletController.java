@@ -2,6 +2,7 @@ package com.resendegabriel.investwalletapi.controller;
 
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import jakarta.validation.Valid;
@@ -53,5 +54,10 @@ public class WalletController {
     public ResponseEntity<Void> deleteById(@PathVariable Long walletId) {
         walletService.deleteById(walletId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{walletId}/actives/details")
+    public ResponseEntity<WalletActivesReportDTO> getWalletActivesReport(@PathVariable Long walletId) {
+        return ResponseEntity.ok().body(walletService.getWalletActivesReport(walletId));
     }
 }
