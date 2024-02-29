@@ -3,7 +3,9 @@ package com.resendegabriel.investwalletapi.service.impl;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -82,5 +85,21 @@ public class WalletService implements IWalletService {
         var walletTotalValue = activeService.getWalletTotalValue(activesReportDTO);
 
         return new WalletActivesReportDTO(wallet, walletTotalValue, activesReportDTO);
+    }
+
+    @Override
+    public WalletActiveTypesReportDTO getWalletActiveTypesReport(Long walletId) {
+        var wallet = new WalletSimpleDTO(findWalletEntityById(walletId));
+
+        Integer distinctActiveTypesQuantity = activeService.getDistinctActiveTypesQuantity(walletId);
+        BigDecimal walletTotalValue = getWalletTotalValue(walletId);
+
+        List<ActiveTypesReportDTO> activeTypesReportDTOS = activeService.getActiveTypesReport(walletId);
+
+        return new WalletActiveTypesReportDTO(wallet, walletTotalValue, distinctActiveTypesQuantity, activeTypesReportDTOS);
+    }
+
+    private BigDecimal getWalletTotalValue(Long walletId) {
+        return activeService.getWalletTotalValue(walletId);
     }
 }

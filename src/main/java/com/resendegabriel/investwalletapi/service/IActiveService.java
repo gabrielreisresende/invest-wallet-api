@@ -3,6 +3,7 @@ package com.resendegabriel.investwalletapi.service;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
 
 import java.math.BigDecimal;
@@ -20,4 +21,10 @@ public interface IActiveService {
     List<ActivesReportDTO> getActivesReport(Long walletId);
 
     BigDecimal getWalletTotalValue(List<ActivesReportDTO> activesReportDTO);
+
+    List<ActiveTypesReportDTO> getActiveTypesReport(Long walletId);
+
+    Integer getDistinctActiveTypesQuantity(Long walletId);
+
+    BigDecimal getWalletTotalValue(Long walletId);
 }

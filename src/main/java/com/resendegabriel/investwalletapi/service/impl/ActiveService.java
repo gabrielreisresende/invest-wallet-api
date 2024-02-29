@@ -4,6 +4,7 @@ import com.resendegabriel.investwalletapi.domain.Active;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.ActiveRepository;
@@ -78,10 +79,56 @@ public class ActiveService implements IActiveService {
 
     private void setEachActivePercent(List<ActivesReportDTO> activesReportDTO, BigDecimal walletTotalValue) {
         activesReportDTO.forEach(active ->
-                active.setActivePercentage(
+                active.setActiveValuePercentage(
                         active.getActiveTotalValue()
                                 .multiply(new BigDecimal("100"))
                                 .divide(walletTotalValue, 2, RoundingMode.HALF_UP)));
+    }
+
+    @Override
+    public List<ActiveTypesReportDTO> getActiveTypesReport(Long walletId) {
+        var activeTypesReportDTO = activeRepository.getActiveTypesReport(walletId);
+
+        setEachActiveTypeQuantityPercent(activeTypesReportDTO);
+        setEachActiveTypeMonetaryPercent(walletId, activeTypesReportDTO);
+
+        return activeTypesReportDTO;
+    }
+
+    private void setEachActiveTypeMonetaryPercent(Long walletId, List<ActiveTypesReportDTO> activeTypesReportDTO) {
+        var walletTotalValue = getWalletTotalValue(walletId);
+
+        activeTypesReportDTO.forEach(activeType ->
+                activeType.setMonetaryPercentage(activeType
+                        .getTotalValue()
+                        .multiply(new BigDecimal("100.00"))
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .divide(walletTotalValue, RoundingMode.HALF_UP)));
+    }
+
+    private void setEachActiveTypeQuantityPercent(List<ActiveTypesReportDTO> activeTypesReportDTO) {
+        var totalActiveTypesQuantity = getTotalActiveTypesQuantity(activeTypesReportDTO);
+
+        activeTypesReportDTO.forEach(activeType ->
+                activeType.setQuantityPercentage(new BigDecimal(
+                        (double) activeType.getQuantityOfActives() * 100 / totalActiveTypesQuantity)
+                        .setScale(2, RoundingMode.HALF_UP)));
+    }
+
+    private Integer getTotalActiveTypesQuantity(List<ActiveTypesReportDTO> activeTypesReportDTO) {
+        return activeTypesReportDTO.stream()
+                .mapToInt(ActiveTypesReportDTO::getQuantityOfActives)
+                .sum();
+    }
+
+    @Override
+    public Integer getDistinctActiveTypesQuantity(Long walletId) {
+        return activeRepository.getDistinctActiveTypesQuantity(walletId);
+    }
+
+    @Override
+    public BigDecimal getWalletTotalValue(Long walletId) {
+        return activeRepository.getWalletTotalValue(walletId);
     }
 
     private Active findAnActiveEntityById(Long activeId) {
