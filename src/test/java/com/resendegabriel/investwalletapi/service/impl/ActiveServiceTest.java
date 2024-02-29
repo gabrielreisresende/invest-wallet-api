@@ -10,6 +10,8 @@ import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
 import com.resendegabriel.investwalletapi.repository.ActiveRepository;
 import com.resendegabriel.investwalletapi.service.IActiveCodeService;
 import com.resendegabriel.investwalletapi.service.IWalletService;
@@ -21,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -142,6 +145,66 @@ class ActiveServiceTest {
 
         assertEquals(new ActiveResponseDTO(active), response);
         then(activeRepository).should().findById(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetTheActivesReport() {
+        var activesReportDTO = ActivesReportDTO.builder()
+                .activeId(1L)
+                .activeCode("MXRF11")
+                .activeValuePercentage(new BigDecimal("100.0"))
+                .activeTotalValue(new BigDecimal("100.0"))
+                .build();
+        when(activeRepository.getActivesReport(anyLong())).thenReturn(List.of(activesReportDTO));
+
+        var response = activeService.getActivesReport(1L);
+
+        assertEquals(List.of(activesReportDTO), response);
+        then(activeRepository).should().getActivesReport(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetTheActiveTypesReport() {
+        var activeTypesReportDTO = ActiveTypesReportDTO.builder()
+                .activeTypeId(1L)
+                .activeType("Papel")
+                .quantityOfActives(1)
+                .quantityPercentage(new BigDecimal("100.0"))
+                .monetaryPercentage(new BigDecimal("100.0"))
+                .totalValue(new BigDecimal("10.0"))
+                .build();
+
+        when(activeRepository.getActiveTypesReport(anyLong())).thenReturn(List.of(activeTypesReportDTO));
+        when(activeRepository.getWalletTotalValue(anyLong())).thenReturn(new BigDecimal("10.0"));
+
+        var response = activeService.getActiveTypesReport(1L);
+
+        assertEquals(List.of(activeTypesReportDTO), response);
+        then(activeRepository).should().getActiveTypesReport(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetTheWalletTotalValue() {
+        when(activeRepository.getWalletTotalValue(anyLong())).thenReturn(new BigDecimal("100.0"));
+
+        var response = activeService.getWalletTotalValue(1L);
+
+        assertEquals(new BigDecimal("100.0"), response);
+        then(activeRepository).should().getWalletTotalValue(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetDistinctActiveTypesQuantity() {
+        when(activeRepository.getDistinctActiveTypesQuantity(anyLong())).thenReturn(1);
+
+        var response = activeService.getDistinctActiveTypesQuantity(1L);
+
+        assertEquals(1, response);
+        then(activeRepository).should().getDistinctActiveTypesQuantity(anyLong());
         then(activeRepository).shouldHaveNoMoreInteractions();
     }
 }

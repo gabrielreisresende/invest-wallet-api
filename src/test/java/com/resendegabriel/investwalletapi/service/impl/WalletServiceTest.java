@@ -5,7 +5,9 @@ import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
@@ -161,7 +163,7 @@ class WalletServiceTest {
         var activesReportDTO = ActivesReportDTO.builder()
                 .activeId(1L)
                 .activeCode("MXRF11")
-                .activePercentage(new BigDecimal("100.0"))
+                .activeValuePercentage(new BigDecimal("100.0"))
                 .activeTotalValue(new BigDecimal("100.0"))
                 .build();
         var walletReportDTO = WalletActivesReportDTO.builder()
@@ -182,6 +184,41 @@ class WalletServiceTest {
         assertEquals(walletReportDTO, response);
         then(activeService).should().getActivesReport(anyLong());
         then(activeService).should().getWalletTotalValue(anyList());
+        then(activeService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldReturnAWalletActiveTypesReport() {
+        var activeTypesReportDTO = ActiveTypesReportDTO.builder()
+                .activeTypeId(1L)
+                .activeType("Papel")
+                .quantityOfActives(1)
+                .quantityPercentage(new BigDecimal("100.0"))
+                .monetaryPercentage(new BigDecimal("100.0"))
+                .totalValue(new BigDecimal("10.0"))
+                .build();
+
+        var walletActiveTypesReportDTO = WalletActiveTypesReportDTO.builder()
+                .wallet(WalletSimpleDTO.builder()
+                        .walletId(wallet.getWalletId())
+                        .name(wallet.getName())
+                        .build())
+                .distinctActiveTypesQuantity(1)
+                .walletTotalValue(new BigDecimal("10.0"))
+                .activeTypes(List.of(activeTypesReportDTO))
+                .build();
+
+        when(walletRepository.findById(anyLong())).thenReturn(Optional.of(wallet));
+        when(activeService.getActiveTypesReport(anyLong())).thenReturn(List.of(activeTypesReportDTO));
+        when(activeService.getDistinctActiveTypesQuantity(anyLong())).thenReturn(1);
+        when(activeService.getWalletTotalValue(anyLong())).thenReturn(new BigDecimal("10.0"));
+
+        var response = walletService.getWalletActiveTypesReport(1L);
+
+        assertEquals(walletActiveTypesReportDTO, response);
+        then(activeService).should().getActiveTypesReport(anyLong());
+        then(activeService).should().getDistinctActiveTypesQuantity(anyLong());
+        then(activeService).should().getWalletTotalValue(anyLong());
         then(activeService).shouldHaveNoMoreInteractions();
     }
 }
