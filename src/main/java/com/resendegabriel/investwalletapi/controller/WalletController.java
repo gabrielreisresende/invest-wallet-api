@@ -3,6 +3,9 @@ package com.resendegabriel.investwalletapi.controller;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveSectorsReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +56,20 @@ public class WalletController {
     public ResponseEntity<Void> deleteById(@PathVariable Long walletId) {
         walletService.deleteById(walletId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{walletId}/actives/details")
+    public ResponseEntity<WalletActivesReportDTO> getWalletActivesReport(@PathVariable Long walletId) {
+        return ResponseEntity.ok().body(walletService.getWalletActivesReport(walletId));
+    }
+
+    @GetMapping("/{walletId}/active-types/details")
+    public ResponseEntity<WalletActiveTypesReportDTO> getWalletActiveTypesReport(@PathVariable Long walletId) {
+        return ResponseEntity.ok().body(walletService.getWalletActiveTypesReport(walletId));
+    }
+
+    @GetMapping("/{walletId}/active-sectors/details")
+    public ResponseEntity<WalletActiveSectorsReportDTO> getWalletActiveSectorsReport(@PathVariable Long walletId) {
+        return ResponseEntity.ok().body(walletService.getWalletActiveSectorsReport(walletId));
     }
 }

@@ -18,6 +18,7 @@ public record WalletResponseDTO(Long walletId,
                                 @JsonIgnoreProperties(value = {"wallets"})
                                 CustomerResponseDTO customer,
 
+                                @JsonIgnoreProperties(value = {"wallet"})
                                 List<ActiveResponseDTO> actives) {
 
     public WalletResponseDTO(Wallet wallet) {
