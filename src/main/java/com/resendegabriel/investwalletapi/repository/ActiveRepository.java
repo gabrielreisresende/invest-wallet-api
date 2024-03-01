@@ -1,8 +1,8 @@
 package com.resendegabriel.investwalletapi.repository;
 
 import com.resendegabriel.investwalletapi.domain.Active;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ActiveRepository extends JpaRepository<Active, Long> {
 
-    @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO(" +
+    @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO(" +
             "a.activeId, " +
             "a.activeCode.activeCode, " +
             "CAST(a.quantity AS BIGDECIMAL) * a.averageValue) " +
@@ -24,7 +24,7 @@ public interface ActiveRepository extends JpaRepository<Active, Long> {
             "WHERE a.wallet.walletId = :walletId")
     BigDecimal getWalletTotalValue(Long walletId);
 
-    @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO(" +
+    @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO(" +
             "a.activeCode.activeType.activeTypeId, " +
             "a.activeCode.activeType.activeType, " +
             "COUNT(a.activeCode.activeType), " +

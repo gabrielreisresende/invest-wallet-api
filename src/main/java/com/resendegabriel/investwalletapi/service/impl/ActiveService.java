@@ -4,8 +4,8 @@ import com.resendegabriel.investwalletapi.domain.Active;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.ActiveRepository;
 import com.resendegabriel.investwalletapi.service.IActiveCodeService;
@@ -64,20 +64,14 @@ public class ActiveService implements IActiveService {
     public List<ActivesReportDTO> getActivesReport(Long walletId) {
         List<ActivesReportDTO> activesReportDTO = activeRepository.getActivesReport(walletId);
 
-        var walletTotalValue = getWalletTotalValue(activesReportDTO);
-        setEachActivePercent(activesReportDTO, walletTotalValue);
+        setEachActivePercent(walletId, activesReportDTO);
 
         return activesReportDTO;
     }
 
-    @Override
-    public BigDecimal getWalletTotalValue(List<ActivesReportDTO> activesReportDTO) {
-        return activesReportDTO.stream()
-                .map(ActivesReportDTO::getActiveTotalValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+    private void setEachActivePercent(Long walletId, List<ActivesReportDTO> activesReportDTO) {
+        var walletTotalValue = getWalletTotalValue(walletId);
 
-    private void setEachActivePercent(List<ActivesReportDTO> activesReportDTO, BigDecimal walletTotalValue) {
         activesReportDTO.forEach(active ->
                 active.setActiveValuePercentage(
                         active.getActiveTotalValue()

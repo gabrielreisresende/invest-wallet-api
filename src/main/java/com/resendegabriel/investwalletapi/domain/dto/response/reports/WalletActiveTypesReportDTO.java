@@ -1,5 +1,6 @@
-package com.resendegabriel.investwalletapi.domain.dto.response;
+package com.resendegabriel.investwalletapi.domain.dto.response.reports;
 
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
 import lombok.Builder;
 
 import java.math.BigDecimal;

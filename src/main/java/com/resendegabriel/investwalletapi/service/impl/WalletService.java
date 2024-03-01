@@ -3,12 +3,12 @@ package com.resendegabriel.investwalletapi.service.impl;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.WalletActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.WalletRepository;
 import com.resendegabriel.investwalletapi.service.IActiveService;
@@ -82,7 +82,7 @@ public class WalletService implements IWalletService {
         var wallet = new WalletSimpleDTO(findWalletEntityById(walletId));
 
         List<ActivesReportDTO> activesReportDTO = activeService.getActivesReport(walletId);
-        var walletTotalValue = activeService.getWalletTotalValue(activesReportDTO);
+        var walletTotalValue = activeService.getWalletTotalValue(walletId);
 
         return new WalletActivesReportDTO(wallet, walletTotalValue, activesReportDTO);
     }

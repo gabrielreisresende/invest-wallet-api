@@ -2,9 +2,9 @@ package com.resendegabriel.investwalletapi.controller;
 
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.WalletActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

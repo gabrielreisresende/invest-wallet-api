@@ -10,8 +10,8 @@ import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
 import com.resendegabriel.investwalletapi.repository.ActiveRepository;
 import com.resendegabriel.investwalletapi.service.IActiveCodeService;
 import com.resendegabriel.investwalletapi.service.IWalletService;
@@ -157,6 +157,7 @@ class ActiveServiceTest {
                 .activeTotalValue(new BigDecimal("100.0"))
                 .build();
         when(activeRepository.getActivesReport(anyLong())).thenReturn(List.of(activesReportDTO));
+        when(activeRepository.getWalletTotalValue(anyLong())).thenReturn(new BigDecimal("100.00"));
 
         var response = activeService.getActivesReport(1L);
 
