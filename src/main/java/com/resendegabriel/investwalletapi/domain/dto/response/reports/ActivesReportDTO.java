@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Setter
 @Getter
@@ -24,6 +25,6 @@ public class ActivesReportDTO {
     public ActivesReportDTO(Long activeId, String activeCode, BigDecimal activeTotalValue) {
         this.activeId = activeId;
         this.activeCode = activeCode;
-        this.activeTotalValue = activeTotalValue;
+        this.activeTotalValue = activeTotalValue.setScale(2, RoundingMode.HALF_UP);
     }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Getter
 @Setter
@@ -33,6 +34,6 @@ public class ActiveSectorsReportDTO {
         this.activeSectorId = ActiveSectorId;
         this.activeSector = ActiveSector;
         this.quantityOfActives = Math.toIntExact(quantityOfActives);
-        this.totalValue = totalValue;
+        this.totalValue = totalValue.setScale(2, RoundingMode.HALF_UP);
     }
 }

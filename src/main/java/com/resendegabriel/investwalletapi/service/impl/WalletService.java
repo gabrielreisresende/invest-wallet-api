@@ -81,7 +81,7 @@ public class WalletService implements IWalletService {
 
     @Override
     public WalletActivesReportDTO getWalletActivesReport(Long walletId) {
-        var wallet = new WalletSimpleDTO(findWalletEntityById(walletId));
+        var wallet = createWalletSimpleResponse(walletId);
 
         List<ActivesReportDTO> activesReportDTO = activeService.getActivesReport(walletId);
         var walletTotalValue = activeService.getWalletTotalValue(walletId);
@@ -91,7 +91,7 @@ public class WalletService implements IWalletService {
 
     @Override
     public WalletActiveTypesReportDTO getWalletActiveTypesReport(Long walletId) {
-        var wallet = new WalletSimpleDTO(findWalletEntityById(walletId));
+        var wallet = createWalletSimpleResponse(walletId);
 
         Integer distinctActiveTypesQuantity = activeService.getDistinctActiveTypesQuantity(walletId);
         BigDecimal walletTotalValue = getWalletTotalValue(walletId);
@@ -103,7 +103,7 @@ public class WalletService implements IWalletService {
 
     @Override
     public WalletActiveSectorsReportDTO getWalletActiveSectorsReport(Long walletId) {
-        var wallet = new WalletSimpleDTO(findWalletEntityById(walletId));
+        var wallet = createWalletSimpleResponse(walletId);
 
         Integer distinctActiveSectorsQuantity = activeService.getDistinctActiveSectorsQuantity(walletId);
         BigDecimal walletTotalValue = getWalletTotalValue(walletId);
@@ -115,5 +115,9 @@ public class WalletService implements IWalletService {
 
     private BigDecimal getWalletTotalValue(Long walletId) {
         return activeService.getWalletTotalValue(walletId);
+    }
+
+    private WalletSimpleDTO createWalletSimpleResponse(Long walletId) {
+        return new WalletSimpleDTO(findWalletEntityById(walletId));
     }
 }

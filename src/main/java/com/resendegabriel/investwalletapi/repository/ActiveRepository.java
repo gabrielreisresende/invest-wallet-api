@@ -20,11 +20,6 @@ public interface ActiveRepository extends JpaRepository<Active, Long> {
             "WHERE a.wallet.walletId = :walletId")
     List<ActivesReportDTO> getActivesReport(Long walletId);
 
-    @Query("SELECT CAST(SUM(a.quantity * a.averageValue) AS BIGDECIMAL) " +
-            "FROM Active a " +
-            "WHERE a.wallet.walletId = :walletId")
-    BigDecimal getWalletTotalValue(Long walletId);
-
     @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO(" +
             "a.activeCode.activeType.activeTypeId, " +
             "a.activeCode.activeType.activeType, " +
@@ -35,16 +30,6 @@ public interface ActiveRepository extends JpaRepository<Active, Long> {
             "GROUP BY a.activeCode.activeType.activeTypeId")
     List<ActiveTypesReportDTO> getActiveTypesReport(Long walletId);
 
-    @Query("SELECT COUNT(DISTINCT a.activeCode.activeType)" +
-            " FROM Active a" +
-            " WHERE a.wallet.walletId = :walletId")
-    Integer getDistinctActiveTypesQuantity(Long walletId);
-
-    @Query("SELECT COUNT(DISTINCT a.activeCode.activeSector)" +
-            " FROM Active a" +
-            " WHERE a.wallet.walletId = :walletId")
-    Integer getDistinctActiveSectorsQuantity(Long walletId);
-
     @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO(" +
             "a.activeCode.activeSector.activeSectorId, " +
             "a.activeCode.activeSector.activeSector, " +
@@ -54,4 +39,19 @@ public interface ActiveRepository extends JpaRepository<Active, Long> {
             "WHERE a.wallet.walletId = :walletId " +
             "GROUP BY a.activeCode.activeSector.activeSectorId")
     List<ActiveSectorsReportDTO> getActiveSectorsReport(Long walletId);
+
+    @Query("SELECT CAST(SUM(a.quantity * a.averageValue) AS BIGDECIMAL) " +
+            "FROM Active a " +
+            "WHERE a.wallet.walletId = :walletId")
+    BigDecimal getWalletTotalValue(Long walletId);
+
+    @Query("SELECT COUNT(DISTINCT a.activeCode.activeType)" +
+            " FROM Active a" +
+            " WHERE a.wallet.walletId = :walletId")
+    Integer getDistinctActiveTypesQuantity(Long walletId);
+
+    @Query("SELECT COUNT(DISTINCT a.activeCode.activeSector)" +
+            " FROM Active a" +
+            " WHERE a.wallet.walletId = :walletId")
+    Integer getDistinctActiveSectorsQuantity(Long walletId);
 }
