@@ -4,6 +4,7 @@ import com.resendegabriel.investwalletapi.domain.Active;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
@@ -123,6 +124,47 @@ public class ActiveService implements IActiveService {
     @Override
     public BigDecimal getWalletTotalValue(Long walletId) {
         return activeRepository.getWalletTotalValue(walletId);
+    }
+
+    @Override
+    public List<ActiveSectorsReportDTO> getActiveSectorsReport(Long walletId) {
+        var activeSectorsReportDTO = activeRepository.getActiveSectorsReport(walletId);
+
+        setEachActiveSectorQuantityPercent(activeSectorsReportDTO);
+        setEachActiveSectorMonetaryPercent(walletId, activeSectorsReportDTO);
+
+        return activeSectorsReportDTO;
+    }
+
+    private void setEachActiveSectorMonetaryPercent(Long walletId, List<ActiveSectorsReportDTO> activeSectorsReportDTO) {
+        var walletTotalValue = getWalletTotalValue(walletId);
+
+        activeSectorsReportDTO.forEach(activeSector ->
+                activeSector.setMonetaryPercentage(activeSector
+                        .getTotalValue()
+                        .multiply(new BigDecimal("100.00"))
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .divide(walletTotalValue, RoundingMode.HALF_UP)));
+    }
+
+    private void setEachActiveSectorQuantityPercent(List<ActiveSectorsReportDTO> activeSectorsReportDTO) {
+        var totalActiveSectorsQuantity = getTotalActiveSectorsQuantity(activeSectorsReportDTO);
+
+        activeSectorsReportDTO.forEach(activeSector ->
+                activeSector.setQuantityPercentage(new BigDecimal(
+                        (double) activeSector.getQuantityOfActives() * 100 / totalActiveSectorsQuantity)
+                        .setScale(2, RoundingMode.HALF_UP)));
+    }
+
+    private Integer getTotalActiveSectorsQuantity(List<ActiveSectorsReportDTO> activeSectorsReportDTO) {
+        return activeSectorsReportDTO.stream()
+                .mapToInt(ActiveSectorsReportDTO::getQuantityOfActives)
+                .sum();
+    }
+
+    @Override
+    public Integer getDistinctActiveSectorsQuantity(Long walletId) {
+        return activeRepository.getDistinctActiveSectorsQuantity(walletId);
     }
 
     private Active findAnActiveEntityById(Long activeId) {

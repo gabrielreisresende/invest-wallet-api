@@ -3,6 +3,7 @@ package com.resendegabriel.investwalletapi.service;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
@@ -26,4 +27,6 @@ public interface IWalletService {
     WalletActivesReportDTO getWalletActivesReport(Long walletId);
 
     WalletActiveTypesReportDTO getWalletActiveTypesReport(Long walletId);
+
+    WalletActiveSectorsReportDTO getWalletActiveSectorsReport(Long walletId);
 }

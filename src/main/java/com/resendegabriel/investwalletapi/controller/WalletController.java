@@ -3,6 +3,7 @@ package com.resendegabriel.investwalletapi.controller;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
@@ -65,5 +66,10 @@ public class WalletController {
     @GetMapping("/{walletId}/active-types/details")
     public ResponseEntity<WalletActiveTypesReportDTO> getWalletActiveTypesReport(@PathVariable Long walletId) {
         return ResponseEntity.ok().body(walletService.getWalletActiveTypesReport(walletId));
+    }
+
+    @GetMapping("/{walletId}/active-sectors/details")
+    public ResponseEntity<WalletActiveSectorsReportDTO> getWalletActiveSectorsReport(@PathVariable Long walletId) {
+        return ResponseEntity.ok().body(walletService.getWalletActiveSectorsReport(walletId));
     }
 }

@@ -5,8 +5,10 @@ import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
@@ -97,6 +99,18 @@ public class WalletService implements IWalletService {
         List<ActiveTypesReportDTO> activeTypesReportDTOS = activeService.getActiveTypesReport(walletId);
 
         return new WalletActiveTypesReportDTO(wallet, walletTotalValue, distinctActiveTypesQuantity, activeTypesReportDTOS);
+    }
+
+    @Override
+    public WalletActiveSectorsReportDTO getWalletActiveSectorsReport(Long walletId) {
+        var wallet = new WalletSimpleDTO(findWalletEntityById(walletId));
+
+        Integer distinctActiveSectorsQuantity = activeService.getDistinctActiveSectorsQuantity(walletId);
+        BigDecimal walletTotalValue = getWalletTotalValue(walletId);
+
+        List<ActiveSectorsReportDTO> activeSectorsReportDTOS = activeService.getActiveSectorsReport(walletId);
+
+        return new WalletActiveSectorsReportDTO(wallet, walletTotalValue, distinctActiveSectorsQuantity, activeSectorsReportDTOS);
     }
 
     private BigDecimal getWalletTotalValue(Long walletId) {

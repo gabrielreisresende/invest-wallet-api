@@ -1,6 +1,7 @@
 package com.resendegabriel.investwalletapi.repository;
 
 import com.resendegabriel.investwalletapi.domain.Active;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,4 +39,19 @@ public interface ActiveRepository extends JpaRepository<Active, Long> {
             " FROM Active a" +
             " WHERE a.wallet.walletId = :walletId")
     Integer getDistinctActiveTypesQuantity(Long walletId);
+
+    @Query("SELECT COUNT(DISTINCT a.activeCode.activeSector)" +
+            " FROM Active a" +
+            " WHERE a.wallet.walletId = :walletId")
+    Integer getDistinctActiveSectorsQuantity(Long walletId);
+
+    @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO(" +
+            "a.activeCode.activeSector.activeSectorId, " +
+            "a.activeCode.activeSector.activeSector, " +
+            "COUNT(a.activeCode.activeSector), " +
+            "SUM(CAST(a.quantity AS BIGDECIMAL) * a.averageValue) AS totalValue) " +
+            "FROM Active a " +
+            "WHERE a.wallet.walletId = :walletId " +
+            "GROUP BY a.activeCode.activeSector.activeSectorId")
+    List<ActiveSectorsReportDTO> getActiveSectorsReport(Long walletId);
 }
