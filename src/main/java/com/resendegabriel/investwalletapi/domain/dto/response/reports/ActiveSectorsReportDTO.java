@@ -17,9 +17,9 @@ import java.math.BigDecimal;
 @JsonPropertyOrder({"activeSectorId", "activeSector"})
 public class ActiveSectorsReportDTO {
 
-    private Long ActiveSectorId;
+    private Long activeSectorId;
 
-    private String ActiveSector;
+    private String activeSector;
 
     private Integer quantityOfActives;
 
@@ -30,8 +30,8 @@ public class ActiveSectorsReportDTO {
     private BigDecimal monetaryPercentage;
 
     public ActiveSectorsReportDTO(Long ActiveSectorId, String ActiveSector, Long quantityOfActives, BigDecimal totalValue) {
-        this.ActiveSectorId = ActiveSectorId;
-        this.ActiveSector = ActiveSector;
+        this.activeSectorId = ActiveSectorId;
+        this.activeSector = ActiveSector;
         this.quantityOfActives = Math.toIntExact(quantityOfActives);
         this.totalValue = totalValue;
     }

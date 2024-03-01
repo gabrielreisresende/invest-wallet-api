@@ -10,6 +10,7 @@ import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
 import com.resendegabriel.investwalletapi.repository.ActiveRepository;
@@ -206,6 +207,38 @@ class ActiveServiceTest {
 
         assertEquals(1, response);
         then(activeRepository).should().getDistinctActiveTypesQuantity(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetTheActiveSectorsReport() {
+        var activeSectorsReportDTO = ActiveSectorsReportDTO.builder()
+                .activeSectorId(1L)
+                .activeSector("Hibrido")
+                .quantityOfActives(1)
+                .quantityPercentage(new BigDecimal("100.0"))
+                .monetaryPercentage(new BigDecimal("100.0"))
+                .totalValue(new BigDecimal("10.0"))
+                .build();
+
+        when(activeRepository.getActiveSectorsReport(anyLong())).thenReturn(List.of(activeSectorsReportDTO));
+        when(activeRepository.getWalletTotalValue(anyLong())).thenReturn(new BigDecimal("10.0"));
+
+        var response = activeService.getActiveSectorsReport(1L);
+
+        assertEquals(List.of(activeSectorsReportDTO), response);
+        then(activeRepository).should().getActiveSectorsReport(anyLong());
+        then(activeRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldGetDistinctActiveSectorsQuantity() {
+        when(activeRepository.getDistinctActiveSectorsQuantity(anyLong())).thenReturn(1);
+
+        var response = activeService.getDistinctActiveSectorsQuantity(1L);
+
+        assertEquals(1, response);
+        then(activeRepository).should().getDistinctActiveSectorsQuantity(anyLong());
         then(activeRepository).shouldHaveNoMoreInteractions();
     }
 }

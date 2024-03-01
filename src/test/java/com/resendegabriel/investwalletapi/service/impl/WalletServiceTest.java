@@ -7,8 +7,10 @@ import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
@@ -217,6 +219,40 @@ class WalletServiceTest {
         assertEquals(walletActiveTypesReportDTO, response);
         then(activeService).should().getActiveTypesReport(anyLong());
         then(activeService).should().getDistinctActiveTypesQuantity(anyLong());
+        then(activeService).should().getWalletTotalValue(anyLong());
+        then(activeService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldReturnAWalletActiveSectorsReport() {
+        var activeSectorsReportDTO = ActiveSectorsReportDTO.builder()
+                .activeSectorId(1L)
+                .activeSector("Hibrido")
+                .quantityOfActives(1)
+                .quantityPercentage(new BigDecimal("100.0"))
+                .monetaryPercentage(new BigDecimal("100.0"))
+                .totalValue(new BigDecimal("10.0"))
+                .build();
+        var walletActiveSectorsReportDTO = WalletActiveSectorsReportDTO.builder()
+                .wallet(WalletSimpleDTO.builder()
+                        .walletId(wallet.getWalletId())
+                        .name(wallet.getName())
+                        .build())
+                .distinctActiveSectorsQuantity(1)
+                .walletTotalValue(new BigDecimal("10.0"))
+                .activeSectors(List.of(activeSectorsReportDTO))
+                .build();
+
+        when(walletRepository.findById(anyLong())).thenReturn(Optional.of(wallet));
+        when(activeService.getActiveSectorsReport(anyLong())).thenReturn(List.of(activeSectorsReportDTO));
+        when(activeService.getDistinctActiveSectorsQuantity(anyLong())).thenReturn(1);
+        when(activeService.getWalletTotalValue(anyLong())).thenReturn(new BigDecimal("10.0"));
+
+        var response = walletService.getWalletActiveSectorsReport(1L);
+
+        assertEquals(walletActiveSectorsReportDTO, response);
+        then(activeService).should().getActiveSectorsReport(anyLong());
+        then(activeService).should().getDistinctActiveSectorsQuantity(anyLong());
         then(activeService).should().getWalletTotalValue(anyLong());
         then(activeService).shouldHaveNoMoreInteractions();
     }

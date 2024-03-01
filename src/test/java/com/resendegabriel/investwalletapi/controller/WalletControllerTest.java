@@ -4,13 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveSectorsReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActivesReportDTO;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -273,6 +275,50 @@ class WalletControllerTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturnCode403WhenTryToGetAWalletActiveTypesReportWithAdminRole() throws Exception {
         mvc.perform(get("/wallets/{walletId}/active-types/details", 1))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CUSTOMER")
+    void shouldReturnCode200WhenGetAWalletActiveSectorsReportWithCustomerRole() throws Exception {
+        var activeSectorsReportDTO = ActiveSectorsReportDTO.builder()
+                .activeSectorId(1L)
+                .activeSector("Hibrido")
+                .quantityOfActives(1)
+                .quantityPercentage(new BigDecimal("100.0"))
+                .monetaryPercentage(new BigDecimal("100.0"))
+                .totalValue(new BigDecimal("10.0"))
+                .build();
+        var walletActiveSectorsReportDTO = WalletActiveSectorsReportDTO.builder()
+                .wallet(WalletSimpleDTO.builder()
+                        .walletId(1L)
+                        .name("Wallet name")
+                        .build())
+                .distinctActiveSectorsQuantity(1)
+                .walletTotalValue(new BigDecimal("10.0"))
+                .activeSectors(List.of(activeSectorsReportDTO))
+                .build();
+
+        when(walletService.getWalletActiveSectorsReport(anyLong())).thenReturn(walletActiveSectorsReportDTO);
+
+        mvc.perform(get("/wallets/{walletId}/active-sectors/details", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.wallet.walletId").value(walletActiveSectorsReportDTO.wallet().walletId()))
+                .andExpect(jsonPath("$.wallet.name").value(walletActiveSectorsReportDTO.wallet().name()))
+                .andExpect(jsonPath("$.distinctActiveSectorsQuantity").value(walletActiveSectorsReportDTO.distinctActiveSectorsQuantity()))
+                .andExpect(jsonPath("$.walletTotalValue").value(walletActiveSectorsReportDTO.walletTotalValue()))
+                .andExpect(jsonPath("$.activeSectors[0].activeSectorId").value(walletActiveSectorsReportDTO.activeSectors().get(0).getActiveSectorId()))
+                .andExpect(jsonPath("$.activeSectors[0].activeSector").value(walletActiveSectorsReportDTO.activeSectors().get(0).getActiveSector()))
+                .andExpect(jsonPath("$.activeSectors[0].quantityOfActives").value(walletActiveSectorsReportDTO.activeSectors().get(0).getQuantityOfActives()))
+                .andExpect(jsonPath("$.activeSectors[0].quantityPercentage").value(walletActiveSectorsReportDTO.activeSectors().get(0).getQuantityPercentage()))
+                .andExpect(jsonPath("$.activeSectors[0].totalValue").value(walletActiveSectorsReportDTO.activeSectors().get(0).getTotalValue()))
+                .andExpect(jsonPath("$.activeSectors[0].monetaryPercentage").value(walletActiveSectorsReportDTO.activeSectors().get(0).getMonetaryPercentage()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCode403WhenTryToGetAWalletActiveSectorsReportWithAdminRole() throws Exception {
+        mvc.perform(get("/wallets/{walletId}/active-sectors/details", 1))
                 .andExpect(status().isForbidden());
     }
 }
