@@ -34,7 +34,7 @@ public class Active {
     @Column(nullable = false, columnDefinition = "INT")
     private Integer quantity;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL", scale = 5, precision = 2)
+    @Column(nullable = false, columnDefinition = "DECIMAL(6,2)")
     private BigDecimal averageValue;
 
     @JoinColumn(name = "active_code", nullable = false)
