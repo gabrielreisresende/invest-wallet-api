@@ -87,7 +87,7 @@ class WalletServiceTest {
 
         var response = walletService.create(walletRequestDTO);
 
-        assertEquals(new WalletResponseDTO(wallet), response);
+        assertEquals(wallet.toWalletResponseDto(), response);
         then(customerService).should().findById(anyLong());
         then(customerService).shouldHaveNoMoreInteractions();
         then(walletRepository).should().save(any(Wallet.class));
@@ -115,7 +115,7 @@ class WalletServiceTest {
 
         var response = walletService.getById(1L);
 
-        assertEquals(new WalletResponseDTO(wallet), response);
+        assertEquals(wallet.toWalletResponseDto(), response);
         then(walletRepository).should().findById(anyLong());
         then(walletRepository).shouldHaveNoMoreInteractions();
     }

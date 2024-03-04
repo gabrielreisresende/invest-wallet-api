@@ -1,5 +1,6 @@
 package com.resendegabriel.investwalletapi.domain.auth;
 
+import com.resendegabriel.investwalletapi.domain.auth.dto.UserResponseDTO;
 import com.resendegabriel.investwalletapi.domain.auth.enums.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -94,5 +95,9 @@ public class User implements UserDetails {
 
     public void updateEmail(String newEmail) {
         this.email = newEmail;
+    }
+
+    public UserResponseDTO toDto() {
+        return new UserResponseDTO(this.userId, this.email, this.role);
     }
 }

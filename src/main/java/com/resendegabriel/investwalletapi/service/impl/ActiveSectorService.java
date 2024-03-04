@@ -21,7 +21,7 @@ public class ActiveSectorService implements IActiveSectorService {
     @Override
     @Transactional
     public ActiveSectorResponseDTO create(ActiveSectorRequestDTO activeSectorRequestDTO) {
-        return new ActiveSectorResponseDTO(activeSectorRepository.save(new ActiveSector(activeSectorRequestDTO)));
+        return activeSectorRepository.save(new ActiveSector(activeSectorRequestDTO)).toDto();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ActiveSectorService implements IActiveSectorService {
     public ActiveSectorResponseDTO updateActiveSectorName(Long activeSectorId, ActiveSectorRequestDTO activeSectorRequestDTO) {
         var activeSector = findActiveSectorEntity(activeSectorId);
         activeSector.updateActiveSectorName(activeSectorRequestDTO.activeSector());
-        return new ActiveSectorResponseDTO(activeSector);
+        return activeSector.toDto();
     }
 
     private ActiveSector findActiveSectorEntity(Long activeSectorId) {
@@ -47,7 +47,7 @@ public class ActiveSectorService implements IActiveSectorService {
 
     @Override
     public ActiveSectorResponseDTO getById(Long activeSectorId) {
-        return new ActiveSectorResponseDTO(findActiveSectorEntity(activeSectorId));
+        return findActiveSectorEntity(activeSectorId).toDto();
     }
 
     @Override

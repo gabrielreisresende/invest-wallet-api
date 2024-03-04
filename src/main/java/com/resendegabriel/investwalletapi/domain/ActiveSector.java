@@ -42,4 +42,8 @@ public class ActiveSector {
     public void updateActiveSectorName(String newActiveSectorName) {
         this.activeSector = newActiveSectorName;
     }
+
+    public ActiveSectorResponseDTO toDto() {
+        return new ActiveSectorResponseDTO(this.activeSectorId, this.activeSector);
+    }
 }

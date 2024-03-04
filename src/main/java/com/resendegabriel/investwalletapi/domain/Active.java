@@ -2,6 +2,7 @@ package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,5 +56,10 @@ public class Active {
     public void updateData(ActiveUpdateDTO activeUpdateDTO) {
         this.quantity = activeUpdateDTO.quantity() != null ? activeUpdateDTO.quantity() : this.quantity;
         this.averageValue = activeUpdateDTO.averageValue() != null ? activeUpdateDTO.averageValue() : this.averageValue;
+    }
+
+    public ActiveResponseDTO toDto() {
+        return new ActiveResponseDTO(this.activeId, this.quantity, this.averageValue,
+                this.activeCode.toDto(), this.wallet.toWalletSimpleDto());
     }
 }

@@ -21,7 +21,7 @@ public class ActiveTypeService implements IActiveTypeService {
     @Override
     @Transactional
     public ActiveTypeResponseDTO create(ActiveTypeRequestDTO activeTypeRequestDTO) {
-        return new ActiveTypeResponseDTO(activeTypeRepository.save(new ActiveType(activeTypeRequestDTO)));
+        return activeTypeRepository.save(new ActiveType(activeTypeRequestDTO)).toDto();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ActiveTypeService implements IActiveTypeService {
     public ActiveTypeResponseDTO updateActiveTypeName(Long activeTypeId, ActiveTypeRequestDTO activeTypeRequestDTO) {
         var activeType = findActiveTypeEntity(activeTypeId);
         activeType.updateActiveTypeName(activeTypeRequestDTO.activeType());
-        return new ActiveTypeResponseDTO(activeType);
+        return activeType.toDto();
     }
 
     private ActiveType findActiveTypeEntity(Long activeTypeId) {
@@ -47,7 +47,7 @@ public class ActiveTypeService implements IActiveTypeService {
 
     @Override
     public ActiveTypeResponseDTO getById(Long activeTypeId) {
-        return new ActiveTypeResponseDTO(findActiveTypeEntity(activeTypeId));
+        return findActiveTypeEntity(activeTypeId).toDto();
     }
 
     @Override

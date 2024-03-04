@@ -2,8 +2,8 @@ package com.resendegabriel.investwalletapi.service.impl;
 
 import com.resendegabriel.investwalletapi.domain.Customer;
 import com.resendegabriel.investwalletapi.domain.dto.request.CustomerRegisterDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.CustomerUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.CustomerRepository;
 import com.resendegabriel.investwalletapi.service.ICustomerService;
@@ -25,7 +25,7 @@ public class CustomerService implements ICustomerService {
     @Transactional
     public CustomerResponseDTO create(CustomerRegisterDTO customerRegisterDTO) {
         var user = userService.save(customerRegisterDTO.base64Credentials());
-        return new CustomerResponseDTO(customerRepository.save(new Customer(customerRegisterDTO, user)));
+        return customerRepository.save(new Customer(customerRegisterDTO, user)).toDto();
     }
 
     @Override
@@ -35,13 +35,13 @@ public class CustomerService implements ICustomerService {
         if (customerUpdateDTO.email() != null)
             userService.updateEmail(customer.getUser().getUserId(), customerUpdateDTO.email());
         customer.updateData(customerUpdateDTO);
-        return new CustomerResponseDTO(customer);
+        return customer.toDto();
     }
 
     @Override
     public CustomerResponseDTO getByUserId(Long userId) {
-        return new CustomerResponseDTO(customerRepository.findByUser_UserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("There is no customer with this userId. UserId " + userId)));
+        return customerRepository.findByUser_UserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("There is no customer with this userId. UserId " + userId)).toDto();
     }
 
     @Override

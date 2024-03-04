@@ -40,7 +40,7 @@ public class WalletService implements IWalletService {
     public WalletResponseDTO create(WalletRequestDTO walletRequestDTO) {
         var customer = customerService.findById(walletRequestDTO.customerId());
         var wallet = new Wallet(walletRequestDTO, customer);
-        return new WalletResponseDTO(walletRepository.save(wallet));
+        return walletRepository.save(wallet).toWalletResponseDto();
     }
 
     @Override
@@ -54,8 +54,8 @@ public class WalletService implements IWalletService {
 
     @Override
     public WalletResponseDTO getById(Long walletId) {
-        return new WalletResponseDTO(walletRepository.findById(walletId)
-                .orElseThrow(() -> new ResourceNotFoundException("There is no wallet with this id. Id " + walletId)));
+        return walletRepository.findById(walletId)
+                .orElseThrow(() -> new ResourceNotFoundException("There is no wallet with this id. Id " + walletId)).toWalletResponseDto();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class WalletService implements IWalletService {
     public WalletResponseDTO update(Long walletId, UpdateWalletDTO updateWalletDTO) {
         var wallet = findWalletEntityById(walletId);
         wallet.updateName(updateWalletDTO);
-        return new WalletResponseDTO(wallet);
+        return wallet.toWalletResponseDto();
     }
 
     @Override
@@ -118,6 +118,6 @@ public class WalletService implements IWalletService {
     }
 
     private WalletSimpleDTO createWalletSimpleResponse(Long walletId) {
-        return new WalletSimpleDTO(findWalletEntityById(walletId));
+        return findWalletEntityById(walletId).toWalletSimpleDto();
     }
 }

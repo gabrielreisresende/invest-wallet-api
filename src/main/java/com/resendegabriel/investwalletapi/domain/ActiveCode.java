@@ -1,6 +1,7 @@
 package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveCodeRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveCodeResponseDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -36,5 +37,9 @@ public class ActiveCode {
         this.activeCode = activeCodeRequestDTO.activeCode();
         this.activeType = new ActiveType(activeCodeRequestDTO.activeType());
         this.activeSector = new ActiveSector(activeCodeRequestDTO.activeSector());
+    }
+
+    public ActiveCodeResponseDTO toDto() {
+        return new ActiveCodeResponseDTO(this.activeCode, this.activeType.toDto(), this.activeSector.toDto());
     }
 }
