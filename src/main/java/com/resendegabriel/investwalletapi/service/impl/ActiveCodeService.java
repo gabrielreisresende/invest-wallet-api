@@ -22,7 +22,7 @@ public class ActiveCodeService implements IActiveCodeService {
     @Transactional
     public ActiveCodeResponseDTO create(ActiveCodeRequestDTO activeCodeRequestDTO) {
         var newActiveCode = new ActiveCode(activeCodeRequestDTO);
-        return new ActiveCodeResponseDTO(activeCodeRepository.save(newActiveCode));
+        return activeCodeRepository.save(newActiveCode).toDto();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ActiveCodeService implements IActiveCodeService {
 
     @Override
     public ActiveCodeResponseDTO getByCode(String activeCode) {
-        return new ActiveCodeResponseDTO(findActiveCodeEntity(activeCode));
+        return findActiveCodeEntity(activeCode).toDto();
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveUpdateDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveTypesReportDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO;
@@ -107,7 +106,7 @@ class ActiveServiceTest {
 
         var response = activeService.create(activeRequestDTO);
 
-        assertEquals(new ActiveResponseDTO(active), response);
+        assertEquals(active.toDto(), response);
         then(activeRepository).should().save(any(Active.class));
         then(activeRepository).shouldHaveNoMoreInteractions();
         then(walletService).should().findWalletEntityById(anyLong());
@@ -122,7 +121,7 @@ class ActiveServiceTest {
 
         var response = activeService.update(1L, activeUpdateDTO);
 
-        assertEquals(new ActiveResponseDTO(active), response);
+        assertEquals(active.toDto(), response);
         then(activeRepository).should().findById(anyLong());
         then(activeRepository).shouldHaveNoMoreInteractions();
     }
@@ -144,7 +143,7 @@ class ActiveServiceTest {
 
         var response = activeService.getById(1L);
 
-        assertEquals(new ActiveResponseDTO(active), response);
+        assertEquals(active.toDto(), response);
         then(activeRepository).should().findById(anyLong());
         then(activeRepository).shouldHaveNoMoreInteractions();
     }

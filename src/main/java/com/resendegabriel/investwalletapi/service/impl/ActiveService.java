@@ -38,7 +38,7 @@ public class ActiveService implements IActiveService {
         var wallet = walletService.findWalletEntityById(activeRequestDTO.walletId());
         var activeCode = activeCodeService.findActiveCodeEntity(activeRequestDTO.activeCode());
         var newActive = new Active(activeRequestDTO, wallet, activeCode);
-        return new ActiveResponseDTO(activeRepository.save(newActive));
+        return activeRepository.save(newActive).toDto();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ActiveService implements IActiveService {
     public ActiveResponseDTO update(Long activeId, ActiveUpdateDTO activeUpdateDTO) {
         var active = findAnActiveEntityById(activeId);
         active.updateData(activeUpdateDTO);
-        return new ActiveResponseDTO(active);
+        return active.toDto();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ActiveService implements IActiveService {
 
     @Override
     public ActiveResponseDTO getById(Long activeId) {
-        return new ActiveResponseDTO(findAnActiveEntityById(activeId));
+        return findAnActiveEntityById(activeId).toDto();
     }
 
     private Active findAnActiveEntityById(Long activeId) {

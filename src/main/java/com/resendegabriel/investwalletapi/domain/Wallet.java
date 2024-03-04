@@ -2,6 +2,9 @@ package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ActiveResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_wallets")
@@ -49,5 +53,19 @@ public class Wallet {
 
     public void updateName(UpdateWalletDTO updateWalletDTO) {
         this.name = updateWalletDTO.walletName();
+    }
+
+    public WalletResponseDTO toWalletResponseDto() {
+        return new WalletResponseDTO(this.walletId, this.name, this.customer.toDto(), getActivesResponseDtoList());
+    }
+
+    private List<ActiveResponseDTO> getActivesResponseDtoList() {
+        return actives == null ? null :
+                actives.stream()
+                        .map(ActiveResponseDTO::new).collect(Collectors.toList());
+    }
+
+    public WalletSimpleDTO toWalletSimpleDto() {
+        return new WalletSimpleDTO(this.walletId, this.name);
     }
 }

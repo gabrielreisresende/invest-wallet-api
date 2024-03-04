@@ -3,6 +3,8 @@ package com.resendegabriel.investwalletapi.domain;
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.CustomerRegisterDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.CustomerUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -83,5 +85,16 @@ public class Customer {
         this.lastName = customerUpdateDTO.lastName() != null ? customerUpdateDTO.lastName() : this.lastName;
         this.phone = customerUpdateDTO.phone() != null ? customerUpdateDTO.phone() : this.phone;
         this.birthDate = customerUpdateDTO.birthDate() != null ? customerUpdateDTO.birthDate() : this.birthDate;
+    }
+
+    public CustomerResponseDTO toDto() {
+        return new CustomerResponseDTO(this.customerId, this.cpf, this.firstName, this.lastName,
+                this.phone, this.birthDate, this.user.toDto(), getWalletSimpleDtoList());
+    }
+
+    private List<WalletSimpleDTO> getWalletSimpleDtoList() {
+        return this.wallets.stream()
+                .map(WalletSimpleDTO::new)
+                .toList();
     }
 }

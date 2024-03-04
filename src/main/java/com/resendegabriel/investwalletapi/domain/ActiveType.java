@@ -42,4 +42,8 @@ public class ActiveType {
     public void updateActiveTypeName(String activeTypeName) {
         this.activeType = activeTypeName;
     }
+
+    public ActiveTypeResponseDTO toDto() {
+        return new ActiveTypeResponseDTO(this.activeTypeId, this.activeType);
+    }
 }
