@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/active-types")
-@Tag(name = "Active Type", description = "Endpoints for the admin users manage the active types and for all users get the active types infos.")
+@Tag(name = "6. Active Type", description = "Endpoints for the admin users manage the active types and for all users get the active types infos.")
 public class ActiveTypeController {
 
     @Autowired

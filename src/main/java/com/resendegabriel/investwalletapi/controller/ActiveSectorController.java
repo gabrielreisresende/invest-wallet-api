@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/active-sectors")
-@Tag(name = "Active Sector", description = "Endpoints for the admin users manage the active sectors and for all users get the active sectors infos.")
+@Tag(name = "7. Active Sector", description = "Endpoints for the admin users manage the active sectors and for all users get the active sectors infos.")
 public class ActiveSectorController {
 
     @Autowired

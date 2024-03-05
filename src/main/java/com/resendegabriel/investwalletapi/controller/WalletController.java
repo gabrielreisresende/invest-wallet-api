@@ -34,7 +34,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wallets")
-@Tag(name = "Wallet", description = "Endpoints for the customer manage his invest wallets.")
+@Tag(name = "3. Wallet", description = "Endpoints for the customer manage his invest wallets.")
 public class WalletController {
 
     @Autowired

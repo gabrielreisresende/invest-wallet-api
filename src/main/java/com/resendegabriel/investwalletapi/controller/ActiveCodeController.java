@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/active-codes")
-@Tag(name = "Active Code", description = "Endpoints for the admin users manage the active codes and for all users get the active codes infos.")
+@Tag(name = "5. Active Code", description = "Endpoints for the admin users manage the active codes and for all users get the active codes infos.")
 public class ActiveCodeController {
 
     @Autowired

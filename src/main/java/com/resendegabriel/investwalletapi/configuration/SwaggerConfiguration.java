@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
                         email = "gabriellrr2005@gmail.com",
                         url = "https://www.linkedin.com/in/gabrielreisresende/"
                 ),
-                description = "This API exposes endpoints to manage an investment wallet. With this you can make a great wallet dashboard and some analysis about your wallet of 'Fundos Imobiliários'. ",
+                description = "This API exposes endpoints to manage an investment wallet. With this API you can make a great wallet dashboard and some analysis about your wallet of 'Fundos Imobiliários'. ",
                 title = "InvestWallet API Rest",
                 version = "1.0"
         ),

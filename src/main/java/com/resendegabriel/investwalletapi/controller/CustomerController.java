@@ -26,7 +26,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/customers")
-@Tag(name = "Customer", description = "Endpoints for the customer manage his personal data.")
+@Tag(name = "2. Customer", description = "Endpoints for the customer manage his personal data.")
 public class CustomerController {
 
     @Autowired
