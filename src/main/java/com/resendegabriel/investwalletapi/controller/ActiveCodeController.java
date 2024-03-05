@@ -1,8 +1,13 @@
 package com.resendegabriel.investwalletapi.controller;
 
+import com.resendegabriel.investwalletapi.controller.doc.activeCode.ActiveCodeCreateDoc;
+import com.resendegabriel.investwalletapi.controller.doc.activeCode.ActiveCodeDeleteDoc;
+import com.resendegabriel.investwalletapi.controller.doc.activeCode.ActiveCodeGetAllDoc;
+import com.resendegabriel.investwalletapi.controller.doc.activeCode.ActiveCodeGetByIdDoc;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveCodeRequestDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.ActiveCodeResponseDTO;
 import com.resendegabriel.investwalletapi.service.IActiveCodeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +25,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/active-codes")
+@Tag(name = "Active Code", description = "Endpoints for the admin users manage the active codes and for all users get the active codes infos.")
 public class ActiveCodeController {
 
     @Autowired
     private IActiveCodeService activeCodeService;
 
+    @ActiveCodeCreateDoc
     @PostMapping
     public ResponseEntity<ActiveCodeResponseDTO> create(@RequestBody @Valid ActiveCodeRequestDTO activeCodeRequestDTO) {
         var activeCodeResponseDTO = activeCodeService.create(activeCodeRequestDTO);
@@ -35,16 +42,19 @@ public class ActiveCodeController {
         return ResponseEntity.created(uri).body(activeCodeResponseDTO);
     }
 
+    @ActiveCodeGetAllDoc
     @GetMapping
     public ResponseEntity<List<ActiveCodeResponseDTO>> getAll() {
         return ResponseEntity.ok().body(activeCodeService.getAll());
     }
 
+    @ActiveCodeGetByIdDoc
     @GetMapping("/details")
     public ResponseEntity<ActiveCodeResponseDTO> getByCode(@RequestParam String activeCode) {
         return ResponseEntity.ok().body(activeCodeService.getByCode(activeCode));
     }
 
+    @ActiveCodeDeleteDoc
     @DeleteMapping
     public ResponseEntity<Void> delete(@RequestParam String activeCode) {
         activeCodeService.delete(activeCode);
