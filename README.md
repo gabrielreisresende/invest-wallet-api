@@ -10,11 +10,11 @@ generate three distinct reports related to your wallets, and use the data to cre
 ## Swagger
 Link to test and view all endpoints from Invest Wallet:
 ```
-http://localhost:8080/api/v1/docs
+http://localhost:8080/api/v1/swagger-ui/index.html#/
 ```
 
 ## Technologies
-- Java 21;
+- Java 17;
 - Spring Boot 3.2.2;
 - MySQL;
 - Postman.
