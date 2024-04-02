@@ -23,7 +23,7 @@ http://localhost:8080/api/v1/swagger-ui/index.html#/
 - Spring Security for authorization and authentication;
 - JWT authentication;
 - Two users role: CUSTOMER and ADMIN;
-- Login data encrypted with Basi Auth;
+- Login data encrypted with Basic Auth;
 - Endpoints with authentication.
   
 ### Admin permissions
