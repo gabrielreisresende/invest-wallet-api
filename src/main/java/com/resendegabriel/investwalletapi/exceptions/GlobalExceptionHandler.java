@@ -2,8 +2,12 @@ package com.resendegabriel.investwalletapi.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -37,6 +41,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<StandardError> sqlIntegrityConstraintViolationExceptionHandler(SQLIntegrityConstraintViolationException ex, HttpServletRequest request) {
         return genericExceptionHandler(ex, request, "Unique value violation", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MailSendException.class)
+    public ResponseEntity<StandardError> mailSendExceptionHandler(MailSendException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Failed to send email", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<StandardError> mailSendExceptionHandler(ValidationException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Validation error", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity badCredentialsExceptionHandler(BadCredentialsException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Invalid credentials", HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity authenticationErrorHandler(AuthenticationException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Authentication failed", HttpStatus.FORBIDDEN);
     }
 
     private ResponseEntity<StandardError> genericExceptionHandler(Exception ex, HttpServletRequest request, String error, HttpStatus status) {
