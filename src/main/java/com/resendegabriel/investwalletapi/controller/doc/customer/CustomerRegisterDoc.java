@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
                         schema = @Schema(implementation = CustomerResponseDTO.class))
         ),
         @ApiResponse(
-                responseCode = "401",
+                responseCode = "403",
                 description = "Access unauthorized",
                 content = @Content(
                         mediaType = "application/json",
