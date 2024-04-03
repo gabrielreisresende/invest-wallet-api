@@ -32,9 +32,9 @@ public class MailService implements IMailService {
         message.setSubject(subjectFormatted);
         message.setText(text);
 
-        logger.info(String.valueOf(message));
         try {
             mailSender.send(message);
+            logger.info(String.valueOf(message));
         } catch (MailException e) {
             throw new MailSendException("Failed to send email. " + e.getMessage());
         }
@@ -45,6 +45,13 @@ public class MailService implements IMailService {
         String subject = "Bem vindo ao Invest Wallet!";
         String message = firstName + ", seja bem vindo ao Invest Wallet!\nSeu cadastro foi realizado com sucesso!\nMuito obrigado por confiar em nossa aplicação. Agora, aproveite para gerenciar seus investimentos!";
         sendMail(email, subject, message);
+    }
+
+    @Override
+    public void sendResetPasswordCodeToEmail(String email, int code) {
+        String subject = "Código de verificação";
+        String text = "Digite o seguinte código para conseguir redefinir sua senha: " + code;
+        sendMail(email, subject, text);
     }
 
     private String formatSubject(String subject) {

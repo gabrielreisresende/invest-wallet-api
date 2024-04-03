@@ -45,6 +45,19 @@ public class UserService implements UserDetailsService {
         user.updateEmail(newEmail);
     }
 
+    @Transactional
+    public void updatePassword(String password, User user) {
+        String encryptedPassword = new BCryptPasswordEncoder().encode(password);
+        user.setPassword(encryptedPassword);
+    }
+
+    public User getUserByEmail(String email) {
+        var user = (User) userRepository.findByEmail(email);
+        if (user == null)
+            throw new ResourceNotFoundException("There is no user with this email. Email " + email);
+        return user;
+    }
+
     private User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("There isn't any user with this id. Id " + userId));
