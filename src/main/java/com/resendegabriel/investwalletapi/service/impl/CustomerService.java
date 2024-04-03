@@ -8,6 +8,7 @@ import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.CustomerRepository;
 import com.resendegabriel.investwalletapi.service.ICustomerService;
 import com.resendegabriel.investwalletapi.service.auth.UserService;
+import com.resendegabriel.investwalletapi.service.mail.IMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +22,16 @@ public class CustomerService implements ICustomerService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private IMailService mailService;
+
     @Override
     @Transactional
     public CustomerResponseDTO create(CustomerRegisterDTO customerRegisterDTO) {
         var user = userService.save(customerRegisterDTO.base64Credentials());
-        return customerRepository.save(new Customer(customerRegisterDTO, user)).toDto();
+        var newCustomer = new Customer(customerRegisterDTO, user);
+        mailService.sendWelcomeEmail(user.getEmail(), newCustomer.getFirstName());
+        return customerRepository.save(newCustomer).toDto();
     }
 
     @Override

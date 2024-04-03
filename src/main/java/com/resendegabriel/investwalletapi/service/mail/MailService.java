@@ -40,6 +40,13 @@ public class MailService implements IMailService {
         }
     }
 
+    @Override
+    public void sendWelcomeEmail(String email, String firstName) {
+        String subject = "Bem vindo ao Invest Wallet!";
+        String message = firstName + ", seja bem vindo ao Invest Wallet!\nSeu cadastro foi realizado com sucesso!\nMuito obrigado por confiar em nossa aplicação. Agora, aproveite para gerenciar seus investimentos!";
+        sendMail(email, subject, message);
+    }
+
     private String formatSubject(String subject) {
         StringBuilder builder = new StringBuilder(subject.substring(0, 1).toUpperCase());
         builder.append(subject.substring(1).toLowerCase());
