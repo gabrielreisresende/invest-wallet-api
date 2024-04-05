@@ -24,7 +24,8 @@ http://localhost:8080/api/v1/swagger-ui/index.html#/
 - JWT authentication;
 - Two users role: CUSTOMER and ADMIN;
 - Login data encrypted with Basic Auth;
-- Endpoints with authentication.
+- Endpoints with authentication;
+- Forgotten password proccess.
   
 ### Admin permissions
 - Manage asset codes;
@@ -37,6 +38,10 @@ http://localhost:8080/api/v1/swagger-ui/index.html#/
 - Create anda manage multiple wallets;
 - Manage wallet assets;
 - Generate reports about each wallet.
+
+### Email functionalities
+- Send an welcome email after the user registration;
+- Send an email with Two Factor Code authentication during the Reset Password Process.
 
 ## Run Invest Wallet Application
 Firstly, clone the repository:
