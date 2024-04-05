@@ -36,7 +36,7 @@ public class    UserService implements UserDetailsService {
         String[] decryptedCredentials = authenticationService.getBase64Credentials(base64Credentials);
         var userEmail = decryptedCredentials[0];
         var userPassword = decryptedCredentials[1];
-        return new User(userEmail, new BCryptPasswordEncoder().encode(userPassword), UserRole.CUSTOMER);
+        return new User(userEmail, new BCryptPasswordEncoder().encode(userPassword), UserRole.CLIENT);
     }
 
     @Transactional

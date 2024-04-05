@@ -34,7 +34,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wallets")
-@Tag(name = "3. Wallet", description = "Endpoints for the customer manage his invest wallets.")
+@Tag(name = "3. Wallet", description = "Endpoints for the client manage his invest wallets.")
 public class WalletController {
 
     @Autowired
@@ -49,9 +49,9 @@ public class WalletController {
     }
 
     @WalletGetAllDoc
-    @GetMapping("/customers/{customerId}")
-    public ResponseEntity<List<WalletResponseDTO>> getAll(@PathVariable Long customerId) {
-        return ResponseEntity.ok().body(walletService.getAll(customerId));
+    @GetMapping("/clients/{clientId}")
+    public ResponseEntity<List<WalletResponseDTO>> getAll(@PathVariable Long clientId) {
+        return ResponseEntity.ok().body(walletService.getAll(clientId));
     }
 
     @WalletGetByIdDoc

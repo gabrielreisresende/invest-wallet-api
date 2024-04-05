@@ -2,7 +2,7 @@ package com.resendegabriel.investwalletapi.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.resendegabriel.investwalletapi.domain.Active;
-import com.resendegabriel.investwalletapi.domain.Customer;
+import com.resendegabriel.investwalletapi.domain.Client;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.dto.UserResponseDTO;
 import lombok.Builder;
@@ -16,7 +16,7 @@ public record WalletResponseDTO(Long walletId,
                                 String name,
 
                                 @JsonIgnoreProperties(value = {"wallets"})
-                                CustomerResponseDTO customer,
+                                ClientResponseDTO client,
 
                                 @JsonIgnoreProperties(value = {"wallet"})
                                 List<ActiveResponseDTO> actives) {
@@ -25,20 +25,20 @@ public record WalletResponseDTO(Long walletId,
         this(
                 wallet.getWalletId(),
                 wallet.getName(),
-                getCustomerResponse(wallet.getCustomer()),
+                getClientResponse(wallet.getClient()),
                 getActivesList(wallet.getActives())
         );
     }
 
-    private static CustomerResponseDTO getCustomerResponse(Customer customer) {
-        return CustomerResponseDTO.builder()
-                .customerId(customer.getCustomerId())
-                .cpf(customer.getCpf())
-                .firstName(customer.getFirstName())
-                .lastName(customer.getLastName())
-                .phone(customer.getPhone())
-                .birthDate(customer.getBirthDate())
-                .user(new UserResponseDTO(customer.getUser()))
+    private static ClientResponseDTO getClientResponse(Client client) {
+        return ClientResponseDTO.builder()
+                .clientId(client.getClientId())
+                .cpf(client.getCpf())
+                .firstName(client.getFirstName())
+                .lastName(client.getLastName())
+                .phone(client.getPhone())
+                .birthDate(client.getBirthDate())
+                .user(new UserResponseDTO(client.getUser()))
                 .build();
     }
 

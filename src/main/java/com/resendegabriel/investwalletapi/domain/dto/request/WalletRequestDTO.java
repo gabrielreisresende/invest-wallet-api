@@ -7,5 +7,5 @@ import lombok.Builder;
 @Builder
 public record WalletRequestDTO(@NotBlank String name,
 
-                               @NotNull Long customerId) {
+                               @NotNull Long clientId) {
 }

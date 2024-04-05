@@ -59,7 +59,7 @@ class PasswordResetServiceTest {
                 .userId(1L)
                 .email("teste@email.com")
                 .password(new BCryptPasswordEncoder().encode("password"))
-                .role(UserRole.CUSTOMER)
+                .role(UserRole.CLIENT)
                 .build();
         emailDTO = new EmailDTO("teste@email.com");
         passwordResetCode = new PasswordResetCode(1234, user);

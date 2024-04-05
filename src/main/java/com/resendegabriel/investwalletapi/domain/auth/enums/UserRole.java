@@ -8,10 +8,10 @@ import java.util.List;
 
 public enum UserRole {
 
-    CUSTOMER {
+    CLIENT {
         @Override
         public Collection<? extends GrantedAuthority> getSimpleGrantedAuthority() {
-            return List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+            return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
         }
     },
     ADMIN {

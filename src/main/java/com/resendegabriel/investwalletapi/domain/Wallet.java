@@ -39,16 +39,16 @@ public class Wallet {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     @ManyToOne
-    private Customer customer;
+    private Client client;
 
     @OneToMany(mappedBy = "wallet")
     private List<Active> actives;
 
-    public Wallet(WalletRequestDTO walletRequestDTO, Customer customer) {
+    public Wallet(WalletRequestDTO walletRequestDTO, Client client) {
         this.name = walletRequestDTO.name();
-        this.customer = customer;
+        this.client = client;
     }
 
     public void updateName(UpdateWalletDTO updateWalletDTO) {
@@ -56,7 +56,7 @@ public class Wallet {
     }
 
     public WalletResponseDTO toWalletResponseDto() {
-        return new WalletResponseDTO(this.walletId, this.name, this.customer.toDto(), getActivesResponseDtoList());
+        return new WalletResponseDTO(this.walletId, this.name, this.client.toDto(), getActivesResponseDtoList());
     }
 
     private List<ActiveResponseDTO> getActivesResponseDtoList() {

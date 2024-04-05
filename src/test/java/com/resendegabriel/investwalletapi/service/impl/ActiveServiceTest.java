@@ -4,7 +4,7 @@ import com.resendegabriel.investwalletapi.domain.Active;
 import com.resendegabriel.investwalletapi.domain.ActiveCode;
 import com.resendegabriel.investwalletapi.domain.ActiveSector;
 import com.resendegabriel.investwalletapi.domain.ActiveType;
-import com.resendegabriel.investwalletapi.domain.Customer;
+import com.resendegabriel.investwalletapi.domain.Client;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.ActiveRequestDTO;
@@ -68,14 +68,14 @@ class ActiveServiceTest {
                 .walletId(1L)
                 .build();
 
-        var customer = Customer.builder()
-                .customerId(1L)
+        var client = Client.builder()
+                .clientId(1L)
                 .user(mock(User.class))
                 .build();
 
         wallet = Wallet.builder()
                 .walletId(activeRequestDTO.walletId())
-                .customer(customer)
+                .client(client)
                 .build();
 
         activeCode = ActiveCode.builder()

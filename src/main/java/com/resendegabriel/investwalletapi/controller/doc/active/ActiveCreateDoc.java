@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
         summary = "Create a new active",
-        description = "Endpoint to create/put a new active in the customer's wallet")
+        description = "Endpoint to create/put a new active in the client's wallet")
 @SecurityRequirement(name = "Bearer Authentication")
 @ApiResponses(value = {
         @ApiResponse(

@@ -46,7 +46,7 @@ class UserServiceTest {
                 .userId(1L)
                 .email("teste@email.com")
                 .password(new BCryptPasswordEncoder().encode("password"))
-                .role(UserRole.CUSTOMER)
+                .role(UserRole.CLIENT)
                 .build();
     }
 
