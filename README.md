@@ -22,7 +22,7 @@ http://localhost:8080/api/v1/swagger-ui/index.html#/
 ## Security
 - Spring Security for authorization and authentication;
 - JWT authentication;
-- Two users role: CUSTOMER and ADMIN;
+- Two users role: CLIENT and ADMIN;
 - Login data encrypted with Basic Auth;
 - Endpoints with authentication;
 - Forgotten password proccess.
@@ -32,7 +32,7 @@ http://localhost:8080/api/v1/swagger-ui/index.html#/
 - Manage asset types;
 - Manage asset sectors.
 
-### Customer functionalities
+### Client functionalities
 - Register in the system;
 - Manage personal data;
 - Create anda manage multiple wallets;
