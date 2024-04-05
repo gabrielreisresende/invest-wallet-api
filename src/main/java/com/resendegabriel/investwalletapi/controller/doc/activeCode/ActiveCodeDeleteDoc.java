@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
         @ApiResponse(responseCode = "204", description = "Active code deleted successfully",
                 content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(
-                responseCode = "401",
+                responseCode = "403",
                 description = "Access unauthorized",
                 content = @Content(
                         mediaType = "application/json",

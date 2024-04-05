@@ -1,6 +1,6 @@
 package com.resendegabriel.investwalletapi.service.impl;
 
-import com.resendegabriel.investwalletapi.domain.Customer;
+import com.resendegabriel.investwalletapi.domain.Client;
 import com.resendegabriel.investwalletapi.domain.Wallet;
 import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
@@ -16,7 +16,7 @@ import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActi
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.WalletRepository;
 import com.resendegabriel.investwalletapi.service.IActiveService;
-import com.resendegabriel.investwalletapi.service.ICustomerService;
+import com.resendegabriel.investwalletapi.service.IClientService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +46,7 @@ class WalletServiceTest {
     private WalletRepository walletRepository;
 
     @Mock
-    private ICustomerService customerService;
+    private IClientService clientService;
 
     @Mock
     private IActiveService activeService;
@@ -55,17 +55,17 @@ class WalletServiceTest {
 
     private static Wallet wallet;
 
-    private static Customer customer;
+    private static Client client;
 
     @BeforeAll
     static void init() {
         walletRequestDTO = WalletRequestDTO.builder()
                 .name("Wallet name")
-                .customerId(1L)
+                .clientId(1L)
                 .build();
 
-        customer = Customer.builder()
-                .customerId(1L)
+        client = Client.builder()
+                .clientId(1L)
                 .user(User.builder()
                         .userId(1L)
                         .build())
@@ -74,7 +74,7 @@ class WalletServiceTest {
 
         wallet = Wallet.builder()
                 .walletId(1L)
-                .customer(customer)
+                .client(client)
                 .name(walletRequestDTO.name())
                 .actives(new ArrayList<>())
                 .build();
@@ -82,29 +82,29 @@ class WalletServiceTest {
 
     @Test
     void shouldCreateANewWallet() {
-        when(customerService.findById(anyLong())).thenReturn(customer);
+        when(clientService.findById(anyLong())).thenReturn(client);
         when(walletRepository.save(any(Wallet.class))).thenReturn(wallet);
 
         var response = walletService.create(walletRequestDTO);
 
         assertEquals(wallet.toWalletResponseDto(), response);
-        then(customerService).should().findById(anyLong());
-        then(customerService).shouldHaveNoMoreInteractions();
+        then(clientService).should().findById(anyLong());
+        then(clientService).shouldHaveNoMoreInteractions();
         then(walletRepository).should().save(any(Wallet.class));
         then(walletRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
-    void shouldGetAllWalletsFromACustomer() {
-        when(customerService.findById(anyLong())).thenReturn(customer);
-        when(walletRepository.findAllByCustomer_CustomerId(anyLong())).thenReturn(List.of(wallet));
+    void shouldGetAllWalletsFromAClient() {
+        when(clientService.findById(anyLong())).thenReturn(client);
+        when(walletRepository.findAllByClient_ClientId(anyLong())).thenReturn(List.of(wallet));
 
         var response = walletService.getAll(1L);
 
         assertEquals(List.of(new WalletResponseDTO(wallet)), response);
-        then(customerService).should().findById(anyLong());
-        then(customerService).shouldHaveNoMoreInteractions();
-        then(walletRepository).should().findAllByCustomer_CustomerId(anyLong());
+        then(clientService).should().findById(anyLong());
+        then(clientService).shouldHaveNoMoreInteractions();
+        then(walletRepository).should().findAllByClient_ClientId(anyLong());
         then(walletRepository).shouldHaveNoMoreInteractions();
     }
 

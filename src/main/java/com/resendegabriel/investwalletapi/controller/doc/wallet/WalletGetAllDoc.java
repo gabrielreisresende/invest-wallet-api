@@ -19,15 +19,15 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
         summary = "Get all wallets",
-        description = "Endpoint to get a list of wallets from an specific customer.")
+        description = "Endpoint to get a list of wallets from an specific client.")
 @SecurityRequirement(name = "Bearer Authentication")
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Return a list of wallets from a customer",
+        @ApiResponse(responseCode = "200", description = "Return a list of wallets from a client",
                 content = @Content(
                         mediaType = "application/json",
                         array = @ArraySchema(schema = @Schema(implementation = WalletResponseDTO.class)))),
         @ApiResponse(
-                responseCode = "401",
+                responseCode = "403",
                 description = "Access unauthorized",
                 content = @Content(
                         mediaType = "application/json",

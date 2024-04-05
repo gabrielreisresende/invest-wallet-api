@@ -70,8 +70,8 @@ class ActiveCodeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToCreateANewActiveCodeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToCreateANewActiveCodeWithClientRole() throws Exception {
         String json = new ObjectMapper().writeValueAsString(activeCodeRequestDTO);
 
         mvc.perform(post("/active-codes")
@@ -95,8 +95,8 @@ class ActiveCodeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAllActiveCodesWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAllActiveCodesWithClientRole() throws Exception {
         when(activeCodeService.getAll()).thenReturn(List.of(activeCodeResponseDTO));
 
         mvc.perform(get("/active-codes"))
@@ -123,8 +123,8 @@ class ActiveCodeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetByIdAnActiveCodeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetByIdAnActiveCodeWithClientRole() throws Exception {
         when(activeCodeService.getByCode(anyString())).thenReturn(activeCodeResponseDTO);
 
         mvc.perform(get("/active-codes/details?activeCode={activeCode}", activeCodeRequestDTO.activeCode()))
@@ -144,8 +144,8 @@ class ActiveCodeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToDeleteByIdAnActiveCodeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToDeleteByIdAnActiveCodeWithClientRole() throws Exception {
         mvc.perform(delete("/active-codes?activeCode={activeCode}", activeCodeRequestDTO.activeCode()))
                 .andExpect(status().isForbidden());
     }

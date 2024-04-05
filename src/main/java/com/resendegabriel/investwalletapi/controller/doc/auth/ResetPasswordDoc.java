@@ -1,13 +1,12 @@
-package com.resendegabriel.investwalletapi.controller.doc.customer;
+package com.resendegabriel.investwalletapi.controller.doc.auth;
 
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.auth.dto.LoginResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.StandardError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,22 +16,15 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-        summary = "Update customer data",
-        description = "Endpoint to update customer email, cpf, first name, last name, phone or birth date ")
-@SecurityRequirement(name = "Bearer Authentication")
+        summary = "Reset Password",
+        description = "Endpoint to reset the user's password")
 @ApiResponses(value = {
         @ApiResponse(
-                responseCode = "200",
-                description = "Customer data updated successfully",
+                responseCode = "204",
+                description = "Password updated",
                 content = @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = CustomerResponseDTO.class))),
-        @ApiResponse(
-                responseCode = "401",
-                description = "Access unauthorized",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = StandardError.class))),
+                        schema = @Schema(implementation = LoginResponseDTO.class))),
         @ApiResponse(
                 responseCode = "400",
                 description = "Invalid request",
@@ -52,5 +44,5 @@ import java.lang.annotation.Target;
                         mediaType = "application/json",
                         schema = @Schema(implementation = StandardError.class)))
 })
-public @interface CustomerUpdateDoc {
+public @interface ResetPasswordDoc {
 }

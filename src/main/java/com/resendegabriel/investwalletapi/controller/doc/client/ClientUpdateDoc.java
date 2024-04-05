@@ -1,12 +1,13 @@
-package com.resendegabriel.investwalletapi.controller.doc.customer;
+package com.resendegabriel.investwalletapi.controller.doc.client;
 
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ClientResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.StandardError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,18 +17,18 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-        summary = "Register a  new customer",
-        description = "Endpoint to create a new customer in the application")
+        summary = "Update client data",
+        description = "Endpoint to update client email, cpf, first name, last name, phone or birth date ")
+@SecurityRequirement(name = "Bearer Authentication")
 @ApiResponses(value = {
         @ApiResponse(
-                responseCode = "201",
-                description = "Customer created successfully",
+                responseCode = "200",
+                description = "Client data updated successfully",
                 content = @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = CustomerResponseDTO.class))
-        ),
+                        schema = @Schema(implementation = ClientResponseDTO.class))),
         @ApiResponse(
-                responseCode = "401",
+                responseCode = "403",
                 description = "Access unauthorized",
                 content = @Content(
                         mediaType = "application/json",
@@ -51,5 +52,5 @@ import java.lang.annotation.Target;
                         mediaType = "application/json",
                         schema = @Schema(implementation = StandardError.class)))
 })
-public @interface CustomerRegisterDoc {
+public @interface ClientUpdateDoc {
 }

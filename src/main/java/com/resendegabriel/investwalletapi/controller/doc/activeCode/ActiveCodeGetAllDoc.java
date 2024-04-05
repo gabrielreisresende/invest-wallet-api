@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
                         mediaType = "application/json",
                         array = @ArraySchema(schema = @Schema(implementation = ActiveCodeResponseDTO.class)))),
         @ApiResponse(
-                responseCode = "401",
+                responseCode = "403",
                 description = "Access unauthorized",
                 content = @Content(
                         mediaType = "application/json",
