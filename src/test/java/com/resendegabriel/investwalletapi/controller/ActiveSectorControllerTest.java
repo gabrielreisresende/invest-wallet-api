@@ -64,8 +64,8 @@ class ActiveSectorControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToCreateANewActiveSectorWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToCreateANewActiveSectorWithClientRole() throws Exception {
         String json = new ObjectMapper().writeValueAsString(activeSectorRequestDTO);
 
         mvc.perform(post("/active-sectors")
@@ -87,8 +87,8 @@ class ActiveSectorControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToUpdateAnActiveSectorWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToUpdateAnActiveSectorWithClientRole() throws Exception {
         var activeSectorUpdateDTO = new ActiveSectorRequestDTO("New name");
         String json = new ObjectMapper().writeValueAsString(activeSectorUpdateDTO);
 
@@ -110,8 +110,8 @@ class ActiveSectorControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAllActiveTypesWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAllActiveTypesWithClientRole() throws Exception {
         when(activeSectorService.getAll()).thenReturn(List.of(activeSectorResponseDTO));
 
         mvc.perform(get("/active-sectors"))
@@ -132,8 +132,8 @@ class ActiveSectorControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetByIdAnActiveTypeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetByIdAnActiveTypeWithClientRole() throws Exception {
         when(activeSectorService.getById(anyLong())).thenReturn(activeSectorResponseDTO);
 
         mvc.perform(get("/active-sectors/{activeSectorId}", 1))
@@ -150,8 +150,8 @@ class ActiveSectorControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToDeleteByIdAnActiveTypeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToDeleteByIdAnActiveTypeWithClientRole() throws Exception {
         mvc.perform(delete("/active-sectors/{activeSectorId}", 1))
                 .andExpect(status().isForbidden());
     }

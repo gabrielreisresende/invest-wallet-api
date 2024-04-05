@@ -76,8 +76,8 @@ class ActiveControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode201WhenCreateANewActiveWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode201WhenCreateANewActiveWithClientRole() throws Exception {
         String json = new ObjectMapper().writeValueAsString(activeRequestDTO);
 
         when(activeService.create(any(ActiveRequestDTO.class))).thenReturn(activeResponseDTO);
@@ -106,8 +106,8 @@ class ActiveControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenUpdateAnActiveWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenUpdateAnActiveWithClientRole() throws Exception {
         String json = new ObjectMapper().writeValueAsString(activeUpdateDTO);
 
         mvc.perform(put("/actives/{activeId}", 1)
@@ -128,8 +128,8 @@ class ActiveControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode204WhenDeleteAnActiveWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode204WhenDeleteAnActiveWithClientRole() throws Exception {
         mvc.perform(delete("/actives/{activeId}", 1))
                 .andExpect(status().isNoContent());
     }
@@ -142,8 +142,8 @@ class ActiveControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAnActiveByIdWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAnActiveByIdWithClientRole() throws Exception {
         when(activeService.getById(anyLong())).thenReturn(activeResponseDTO);
 
         mvc.perform(get("/actives/{activeId}", 1))

@@ -1,6 +1,5 @@
-package com.resendegabriel.investwalletapi.controller.doc.customer;
+package com.resendegabriel.investwalletapi.controller.doc.client;
 
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.StandardError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,16 +16,14 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-        summary = "Update customer data",
-        description = "Endpoint to update customer email, cpf, first name, last name, phone or birth date ")
+        summary = "Delete a client",
+        description = "Endpoint to delete a client by id")
 @SecurityRequirement(name = "Bearer Authentication")
 @ApiResponses(value = {
         @ApiResponse(
-                responseCode = "200",
-                description = "Customer data updated successfully",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = CustomerResponseDTO.class))),
+                responseCode = "204",
+                description = "Client deleted successfully",
+                content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(
                 responseCode = "403",
                 description = "Access unauthorized",
@@ -52,5 +49,5 @@ import java.lang.annotation.Target;
                         mediaType = "application/json",
                         schema = @Schema(implementation = StandardError.class)))
 })
-public @interface CustomerUpdateDoc {
+public @interface ClientDeleteDoc {
 }

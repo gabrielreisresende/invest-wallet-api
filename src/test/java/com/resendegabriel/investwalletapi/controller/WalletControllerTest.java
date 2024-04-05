@@ -1,10 +1,10 @@
 package com.resendegabriel.investwalletapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.resendegabriel.investwalletapi.domain.Customer;
+import com.resendegabriel.investwalletapi.domain.Client;
 import com.resendegabriel.investwalletapi.domain.dto.request.UpdateWalletDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.WalletRequestDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ClientResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.reports.ActiveSectorsReportDTO;
@@ -53,7 +53,7 @@ class WalletControllerTest {
 
     private static WalletResponseDTO walletResponseDTO;
 
-    private static Customer customer;
+    private static Client client;
 
     private static UpdateWalletDTO updateWalletDTO;
 
@@ -61,29 +61,29 @@ class WalletControllerTest {
     static void init() {
         walletRequestDTO = WalletRequestDTO.builder()
                 .name("Wallet name")
-                .customerId(1L)
+                .clientId(1L)
                 .build();
 
         walletResponseDTO = WalletResponseDTO.builder()
                 .walletId(1L)
                 .name("Wallet name")
-                .customer(
-                        CustomerResponseDTO.builder()
-                                .customerId(1L)
+                .client(
+                        ClientResponseDTO.builder()
+                                .clientId(1L)
                                 .build())
                 .actives(new ArrayList<>())
                 .build();
 
-        customer = Customer.builder()
-                .customerId(1L)
+        client = Client.builder()
+                .clientId(1L)
                 .build();
 
         updateWalletDTO = new UpdateWalletDTO("New wallet name");
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode201WhenCreateAWalletWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode201WhenCreateAWalletWithClientRole() throws Exception {
         String json = new ObjectMapper().writeValueAsString(walletRequestDTO);
 
         when(walletService.create(any(WalletRequestDTO.class))).thenReturn(walletResponseDTO);
@@ -110,11 +110,11 @@ class WalletControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAllWalletsFromACustomerWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAllWalletsFromAClientWithClientRole() throws Exception {
         when(walletService.getAll(anyLong())).thenReturn(List.of(walletResponseDTO));
 
-        mvc.perform(get("/wallets/customers/{customerId}", 1))
+        mvc.perform(get("/wallets/clients/{clientId}", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].walletId").value(1))
                 .andExpect(jsonPath("$[0].name").value("Wallet name"))
@@ -123,14 +123,14 @@ class WalletControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldReturnCode403WhenTryToGetAllWalletsFromACustomerWithAdminRole() throws Exception {
-        mvc.perform(get("/wallets/customers/{customerId}", 1))
+    void shouldReturnCode403WhenTryToGetAllWalletsFromAClientWithAdminRole() throws Exception {
+        mvc.perform(get("/wallets/clients/{clientId}", 1))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAWalletByIdWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAWalletByIdWithClientRole() throws Exception {
         when(walletService.getById(anyLong())).thenReturn(walletResponseDTO);
 
         mvc.perform(get("/wallets/{walletId}", 1))
@@ -148,12 +148,12 @@ class WalletControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenUpdateAWalletNameWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenUpdateAWalletNameWithClientRole() throws Exception {
         var newWalletResponse = WalletResponseDTO.builder()
                 .walletId(walletResponseDTO.walletId())
                 .name(updateWalletDTO.walletName())
-                .customer(walletResponseDTO.customer())
+                .client(walletResponseDTO.client())
                 .actives(walletResponseDTO.actives())
                 .build();
 
@@ -167,7 +167,7 @@ class WalletControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.walletId").value(1))
                 .andExpect(jsonPath("$.name").value(updateWalletDTO.walletName()))
-                .andExpect(jsonPath("$.customer.customerId").value(walletResponseDTO.customer().customerId()))
+                .andExpect(jsonPath("$.client.clientId").value(walletResponseDTO.client().clientId()))
                 .andExpect(jsonPath("$.actives").isEmpty());
     }
 
@@ -183,8 +183,8 @@ class WalletControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode204WhenDeleteAWalletWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode204WhenDeleteAWalletWithClientRole() throws Exception {
         mvc.perform(delete("/wallets/{walletId}", 1))
                 .andExpect(status().isNoContent());
     }
@@ -197,8 +197,8 @@ class WalletControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAWalletActivesReportWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAWalletActivesReportWithClientRole() throws Exception {
         var activesReportDTO = ActivesReportDTO.builder()
                 .activeId(1L)
                 .activeCode("MXRF11")
@@ -235,8 +235,8 @@ class WalletControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAWalletActiveTypesReportWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAWalletActiveTypesReportWithClientRole() throws Exception {
         var activeTypesReportDTO = ActiveTypesReportDTO.builder()
                 .activeTypeId(1L)
                 .activeType("Papel")
@@ -279,8 +279,8 @@ class WalletControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAWalletActiveSectorsReportWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAWalletActiveSectorsReportWithClientRole() throws Exception {
         var activeSectorsReportDTO = ActiveSectorsReportDTO.builder()
                 .activeSectorId(1L)
                 .activeSector("Hibrido")

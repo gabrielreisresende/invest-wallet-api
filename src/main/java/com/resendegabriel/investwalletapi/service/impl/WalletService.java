@@ -14,7 +14,7 @@ import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActi
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.WalletRepository;
 import com.resendegabriel.investwalletapi.service.IActiveService;
-import com.resendegabriel.investwalletapi.service.ICustomerService;
+import com.resendegabriel.investwalletapi.service.IClientService;
 import com.resendegabriel.investwalletapi.service.IWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class WalletService implements IWalletService {
     private WalletRepository walletRepository;
 
     @Autowired
-    private ICustomerService customerService;
+    private IClientService clientService;
 
     @Autowired
     private IActiveService activeService;
@@ -38,16 +38,16 @@ public class WalletService implements IWalletService {
     @Override
     @Transactional
     public WalletResponseDTO create(WalletRequestDTO walletRequestDTO) {
-        var customer = customerService.findById(walletRequestDTO.customerId());
-        var wallet = new Wallet(walletRequestDTO, customer);
+        var client = clientService.findById(walletRequestDTO.clientId());
+        var wallet = new Wallet(walletRequestDTO, client);
         return walletRepository.save(wallet).toWalletResponseDto();
     }
 
     @Override
-    public List<WalletResponseDTO> getAll(Long customerId) {
-        customerService.findById(customerId);
+    public List<WalletResponseDTO> getAll(Long clientId) {
+        clientService.findById(clientId);
         return walletRepository
-                .findAllByCustomer_CustomerId(customerId)
+                .findAllByClient_ClientId(clientId)
                 .stream().map(WalletResponseDTO::new)
                 .toList();
     }

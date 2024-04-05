@@ -1,9 +1,9 @@
 package com.resendegabriel.investwalletapi.domain;
 
 import com.resendegabriel.investwalletapi.domain.auth.User;
-import com.resendegabriel.investwalletapi.domain.dto.request.CustomerRegisterDTO;
-import com.resendegabriel.investwalletapi.domain.dto.request.CustomerUpdateDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ClientRegisterDTO;
+import com.resendegabriel.investwalletapi.domain.dto.request.ClientUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.ClientResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.response.WalletSimpleDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,20 +29,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_customers")
+@Table(name = "tb_clients")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "customerId")
-@SQLDelete(sql = "UPDATE tb_customers SET deleted = true WHERE customer_id=?")
+@EqualsAndHashCode(of = "clientId")
+@SQLDelete(sql = "UPDATE tb_clients SET deleted = true WHERE client_id=?")
 @SQLRestriction("deleted=false")
-public class Customer {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
+    private Long clientId;
 
     @Column(nullable = false, unique = true, updatable = false, length = 14)
     private String cpf;
@@ -66,29 +66,29 @@ public class Customer {
     @OneToOne(cascade = CascadeType.REMOVE)
     private User user;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "client")
     private List<Wallet> wallets;
 
-    public Customer(CustomerRegisterDTO customerRegisterDTO, User user) {
-        this.cpf = customerRegisterDTO.cpf();
-        this.firstName = customerRegisterDTO.firstName();
-        this.lastName = customerRegisterDTO.lastName();
-        this.phone = customerRegisterDTO.phone();
-        this.birthDate = customerRegisterDTO.birthDate();
+    public Client(ClientRegisterDTO clientRegisterDTO, User user) {
+        this.cpf = clientRegisterDTO.cpf();
+        this.firstName = clientRegisterDTO.firstName();
+        this.lastName = clientRegisterDTO.lastName();
+        this.phone = clientRegisterDTO.phone();
+        this.birthDate = clientRegisterDTO.birthDate();
         this.user = user;
         this.wallets = new ArrayList<>();
     }
 
-    public void updateData(CustomerUpdateDTO customerUpdateDTO) {
-        this.cpf = customerUpdateDTO.cpf() != null ? customerUpdateDTO.cpf() : this.cpf;
-        this.firstName = customerUpdateDTO.firstName() != null ? customerUpdateDTO.firstName() : this.firstName;
-        this.lastName = customerUpdateDTO.lastName() != null ? customerUpdateDTO.lastName() : this.lastName;
-        this.phone = customerUpdateDTO.phone() != null ? customerUpdateDTO.phone() : this.phone;
-        this.birthDate = customerUpdateDTO.birthDate() != null ? customerUpdateDTO.birthDate() : this.birthDate;
+    public void updateData(ClientUpdateDTO clientUpdateDTO) {
+        this.cpf = clientUpdateDTO.cpf() != null ? clientUpdateDTO.cpf() : this.cpf;
+        this.firstName = clientUpdateDTO.firstName() != null ? clientUpdateDTO.firstName() : this.firstName;
+        this.lastName = clientUpdateDTO.lastName() != null ? clientUpdateDTO.lastName() : this.lastName;
+        this.phone = clientUpdateDTO.phone() != null ? clientUpdateDTO.phone() : this.phone;
+        this.birthDate = clientUpdateDTO.birthDate() != null ? clientUpdateDTO.birthDate() : this.birthDate;
     }
 
-    public CustomerResponseDTO toDto() {
-        return new CustomerResponseDTO(this.customerId, this.cpf, this.firstName, this.lastName,
+    public ClientResponseDTO toDto() {
+        return new ClientResponseDTO(this.clientId, this.cpf, this.firstName, this.lastName,
                 this.phone, this.birthDate, this.user.toDto(), getWalletSimpleDtoList());
     }
 

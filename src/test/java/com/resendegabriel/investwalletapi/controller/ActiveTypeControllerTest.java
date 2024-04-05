@@ -64,8 +64,8 @@ class ActiveTypeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToCreateANewActiveTypeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToCreateANewActiveTypeWithClientRole() throws Exception {
         String json = new ObjectMapper().writeValueAsString(activeTypeRequestDTO);
 
         mvc.perform(post("/active-types")
@@ -87,8 +87,8 @@ class ActiveTypeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToUpdateAnActiveTypeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToUpdateAnActiveTypeWithClientRole() throws Exception {
         var activeTypeUpdateDTO = new ActiveTypeRequestDTO("New name");
         String json = new ObjectMapper().writeValueAsString(activeTypeUpdateDTO);
 
@@ -110,8 +110,8 @@ class ActiveTypeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetAllActiveTypesWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetAllActiveTypesWithClientRole() throws Exception {
         when(activeTypeService.getAll()).thenReturn(List.of(activeTypeResponseDTO));
 
         mvc.perform(get("/active-types"))
@@ -132,8 +132,8 @@ class ActiveTypeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode200WhenGetByIdAnActiveTypeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode200WhenGetByIdAnActiveTypeWithClientRole() throws Exception {
         when(activeTypeService.getById(anyLong())).thenReturn(activeTypeResponseDTO);
 
         mvc.perform(get("/active-types/{activeTypeId}", 1))
@@ -150,8 +150,8 @@ class ActiveTypeControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "CUSTOMER")
-    void shouldReturnCode403WhenTryToDeleteByIdAnActiveTypeWithCustomerRole() throws Exception {
+    @WithMockUser(roles = "CLIENT")
+    void shouldReturnCode403WhenTryToDeleteByIdAnActiveTypeWithClientRole() throws Exception {
         mvc.perform(delete("/active-types/{activeTypeId}", 1))
                 .andExpect(status().isForbidden());
     }
