@@ -5,11 +5,12 @@ import com.resendegabriel.investwalletapi.domain.auth.User;
 import com.resendegabriel.investwalletapi.domain.auth.dto.UserResponseDTO;
 import com.resendegabriel.investwalletapi.domain.auth.enums.UserRole;
 import com.resendegabriel.investwalletapi.domain.dto.request.CustomerRegisterDTO;
-import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.domain.dto.request.CustomerUpdateDTO;
+import com.resendegabriel.investwalletapi.domain.dto.response.CustomerResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.ResourceNotFoundException;
 import com.resendegabriel.investwalletapi.repository.CustomerRepository;
 import com.resendegabriel.investwalletapi.service.auth.UserService;
+import com.resendegabriel.investwalletapi.service.mail.IMailService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mail.MailSendException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +44,9 @@ class CustomerServiceTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private IMailService mailService;
 
     private static CustomerRegisterDTO customerRegisterDTO;
 
@@ -101,6 +107,42 @@ class CustomerServiceTest {
         var response = customerService.create(customerRegisterDTO);
 
         assertEquals(customerResponseDTO, response);
+        then(userService).should().save(anyString());
+        then(userService).shouldHaveNoMoreInteractions();
+        then(customerRepository).should().save(any(Customer.class));
+        then(customerRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldSendAWelcomeEmailAfterTheCustomerRegistration() {
+        when(userService.save(anyString())).thenReturn(user);
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+
+        customerService.create(customerRegisterDTO);
+
+        then(mailService).should().sendWelcomeEmail(anyString(), anyString());
+        then(mailService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void shouldNotSendAWelcomeEmailWhenHappenARegistrationError() {
+        when(userService.save(anyString())).thenReturn(user);
+        when(customerRepository.save(any(Customer.class))).thenThrow(new RuntimeException("Failed to save customer"));
+
+        assertThrows(RuntimeException.class, () -> customerService.create(customerRegisterDTO));
+        then(mailService).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void shouldRegisterANewCustomerEvenIfMailServiceThrowMailSendException() {
+        when(userService.save(anyString())).thenReturn(user);
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+        doThrow(new MailSendException("Failed to send email")).when(mailService).sendMail(anyString(), anyString(), anyString());
+
+        var response = customerService.create(customerRegisterDTO);
+
+        assertEquals(new CustomerResponseDTO(customer), response);
+        assertThrows(MailSendException.class, () -> mailService.sendMail(anyString(), anyString(), anyString()));
         then(userService).should().save(anyString());
         then(userService).shouldHaveNoMoreInteractions();
         then(customerRepository).should().save(any(Customer.class));
