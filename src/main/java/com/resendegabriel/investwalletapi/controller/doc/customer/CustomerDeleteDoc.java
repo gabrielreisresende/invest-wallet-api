@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
                 description = "Customer deleted successfully",
                 content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(
-                responseCode = "401",
+                responseCode = "403",
                 description = "Access unauthorized",
                 content = @Content(
                         mediaType = "application/json",

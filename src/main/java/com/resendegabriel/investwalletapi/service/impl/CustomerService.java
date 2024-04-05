@@ -30,8 +30,9 @@ public class CustomerService implements ICustomerService {
     public CustomerResponseDTO create(CustomerRegisterDTO customerRegisterDTO) {
         var user = userService.save(customerRegisterDTO.base64Credentials());
         var newCustomer = new Customer(customerRegisterDTO, user);
+        var customerResponseDTO = customerRepository.save(newCustomer).toDto();
         mailService.sendWelcomeEmail(user.getEmail(), newCustomer.getFirstName());
-        return customerRepository.save(newCustomer).toDto();
+        return customerResponseDTO;
     }
 
     @Override

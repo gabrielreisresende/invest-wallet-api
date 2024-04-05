@@ -1,13 +1,12 @@
-package com.resendegabriel.investwalletapi.controller.doc.wallet.reports;
+package com.resendegabriel.investwalletapi.controller.doc.auth;
 
-import com.resendegabriel.investwalletapi.domain.dto.response.reports.WalletActiveTypesReportDTO;
+import com.resendegabriel.investwalletapi.domain.auth.dto.LoginResponseDTO;
 import com.resendegabriel.investwalletapi.exceptions.StandardError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,24 +16,18 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-        summary = "Get a wallet active types report",
-        description = "Return a wallet active types report with details of each active type," +
-                " with wallet total value and with the quantity of distinct active types quantity.")
-@SecurityRequirement(name = "Bearer Authentication")
+        summary = "Verify Two Factor Code",
+        description = "Endpoint to verify if the two factor code entered by the user is valid")
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Return the report successfully",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = WalletActiveTypesReportDTO.class))),
         @ApiResponse(
-                responseCode = "403",
-                description = "Access unauthorized",
+                responseCode = "202",
+                description = "Two factor code is valid",
                 content = @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = StandardError.class))),
+                        schema = @Schema(implementation = LoginResponseDTO.class))),
         @ApiResponse(
                 responseCode = "400",
-                description = "Invalid request",
+                description = "Invalid request or Two Factor code invalid",
                 content = @Content(
                         mediaType = "application/json",
                         schema = @Schema(implementation = StandardError.class))),
@@ -51,5 +44,5 @@ import java.lang.annotation.Target;
                         mediaType = "application/json",
                         schema = @Schema(implementation = StandardError.class)))
 })
-public @interface WalletActiveTypesReportDoc {
+public @interface VerifyTwoFactorCodeDoc {
 }

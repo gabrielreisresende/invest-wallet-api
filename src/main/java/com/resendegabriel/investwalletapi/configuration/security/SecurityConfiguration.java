@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     private static final String ACTIVES_ENDPOINT = "/actives/**";
 
     private static final String[] WHITE_AUTH_LIST = {
-            "/api/v1/auth/**",
+            "/auth/**",
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
