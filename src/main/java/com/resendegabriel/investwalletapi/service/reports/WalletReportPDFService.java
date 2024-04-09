@@ -6,6 +6,7 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
+import com.resendegabriel.investwalletapi.service.IWalletService;
 import com.resendegabriel.investwalletapi.service.mail.IMailService;
 import com.resendegabriel.investwalletapi.utils.WalletReportsToPDFUtility;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +27,9 @@ public class WalletReportPDFService implements IPDFGenerator {
 
     @Autowired
     private IMailService mailService;
+
+    @Autowired
+    private IWalletService walletService;
 
     private static final String INVEST_WALLET_TITLE = "Invest Wallet Reports";
 
@@ -55,7 +59,7 @@ public class WalletReportPDFService implements IPDFGenerator {
 
         document.close();
 
-        sendPdfToMail(outputStream.toByteArray());
+        sendPdfToMail(outputStream.toByteArray(), walletId);
     }
 
     private void setReportPageGenericSettings(Document document, Long walletId) throws IOException {
@@ -70,9 +74,9 @@ public class WalletReportPDFService implements IPDFGenerator {
         document.add(investWalletTitle);
     }
 
-    private void sendPdfToMail(byte[] document) {
+    private void sendPdfToMail(byte[] document, Long walletId) {
         var attachmentName = "wallet-report-" + getFormattedCurrentDate() + ".pdf";
-        mailService.sendMailWithAttachment("gabriellreis2005@gmail.com", "Relatório da Carteira de Investimentos", document, attachmentName);
+        mailService.sendMailWithAttachment(walletService.getWalletOwnerMail(walletId), "Relatório da Carteira de Investimentos", document, attachmentName);
     }
 
     private static String getFormattedCurrentDate() {

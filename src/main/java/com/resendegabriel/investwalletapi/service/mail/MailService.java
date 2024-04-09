@@ -74,7 +74,7 @@ public class MailService implements IMailService {
         helper.addAttachment(attachmentName, attachment);
 
         mailSender.send(message);
-
+        logger.info("Relatorio de Investimentos Enviado para o email");
     }
 
     private String formatSubject(String subject) {

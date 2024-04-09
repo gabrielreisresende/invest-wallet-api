@@ -29,4 +29,6 @@ public interface IWalletService {
     WalletActiveTypesReportDTO getWalletActiveTypesReport(Long walletId);
 
     WalletActiveSectorsReportDTO getWalletActiveSectorsReport(Long walletId);
+
+    String getWalletOwnerMail(Long walletId);
 }
