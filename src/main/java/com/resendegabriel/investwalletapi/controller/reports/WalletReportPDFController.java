@@ -4,6 +4,7 @@ import com.resendegabriel.investwalletapi.controller.doc.report.pdf.DownloadRepo
 import com.resendegabriel.investwalletapi.service.reports.IPDFGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,5 +34,11 @@ public class WalletReportPDFController {
         response.setHeader(headerKey, headerValue);
 
         pdfGenerator.export(response, walletId);
+    }
+
+    @GetMapping("/mail/wallets/{walletId}")
+    public ResponseEntity<?> sendWalletReportPDFToMail(@PathVariable Long walletId) throws IOException {
+        pdfGenerator.exportToMail(walletId);
+        return ResponseEntity.ok().body("Relatório de investimentos enviado para o email");
     }
 }

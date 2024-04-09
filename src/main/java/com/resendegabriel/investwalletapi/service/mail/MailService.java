@@ -1,13 +1,19 @@
 package com.resendegabriel.investwalletapi.service.mail;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -52,6 +58,23 @@ public class MailService implements IMailService {
         String subject = "Código de verificação";
         String text = "Digite o seguinte código para conseguir redefinir sua senha: " + code;
         sendMail(email, subject, text);
+    }
+
+    @SneakyThrows
+    @Override
+    public void sendMailWithAttachment(String mail, String subject, byte[] attachmentData, String attachmentName) {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(mail);
+        helper.setSubject(subject);
+        helper.setText("Olá, o relatório de investimento de sua carteira está disponível no anexo desse email.");
+
+        InputStreamSource attachment = new ByteArrayResource(attachmentData);
+        helper.addAttachment(attachmentName, attachment);
+
+        mailSender.send(message);
+
     }
 
     private String formatSubject(String subject) {
