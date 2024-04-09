@@ -1,5 +1,6 @@
 package com.resendegabriel.investwalletapi.exceptions;
 
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
@@ -48,8 +49,13 @@ public class GlobalExceptionHandler {
         return genericExceptionHandler(ex, request, "Failed to send email", HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity<StandardError> mailSendPDFExceptionHandler(MessagingException ex, HttpServletRequest request) {
+        return genericExceptionHandler(ex, request, "Failed to send mail with attachment", HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<StandardError> mailSendExceptionHandler(ValidationException ex, HttpServletRequest request) {
+    public ResponseEntity<StandardError> validationExceptionHandler(ValidationException ex, HttpServletRequest request) {
         return genericExceptionHandler(ex, request, "Validation error", HttpStatus.BAD_REQUEST);
     }
 
