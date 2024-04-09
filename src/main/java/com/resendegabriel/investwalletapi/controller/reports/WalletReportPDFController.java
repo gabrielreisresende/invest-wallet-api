@@ -1,7 +1,9 @@
 package com.resendegabriel.investwalletapi.controller.reports;
 
 import com.resendegabriel.investwalletapi.controller.doc.report.pdf.DownloadReportPDFDoc;
+import com.resendegabriel.investwalletapi.controller.doc.report.pdf.SendReportPDFToMailDoc;
 import com.resendegabriel.investwalletapi.service.reports.IPDFGenerator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/export/reports/pdf")
+@Tag(name = "4. Export Wallet Reports", description = "Endpoints to receive the wallet completed report (download or email).")
 public class WalletReportPDFController {
 
     @Autowired
@@ -36,6 +39,7 @@ public class WalletReportPDFController {
         pdfGenerator.export(response, walletId);
     }
 
+    @SendReportPDFToMailDoc
     @GetMapping("/mail/wallets/{walletId}")
     public ResponseEntity<?> sendWalletReportPDFToMail(@PathVariable Long walletId) throws IOException {
         pdfGenerator.exportToMail(walletId);

@@ -26,7 +26,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/actives")
-@Tag(name = "4. Active", description = "Endpoints for the client manage his actives.")
+@Tag(name = "5. Active", description = "Endpoints for the client manage his actives.")
 public class ActiveController {
 
     @Autowired

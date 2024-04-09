@@ -16,14 +16,16 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-        summary = "Get a wallet pdf report",
-        description = "Return a wallet pdf report with some details and important data of the wallet.")
+        summary = "Send the wallet report to the user mail",
+        description = "Send the wallet report to the user mail and return a successful message.")
 @SecurityRequirement(name = "Bearer Authentication")
 @ApiResponses(value = {
         @ApiResponse(
                 responseCode = "200",
-                description = "Return the report successfully"
-        ),
+                description = "Return a successful",
+                content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = String.class))),
         @ApiResponse(
                 responseCode = "403",
                 description = "Access unauthorized",
@@ -49,5 +51,5 @@ import java.lang.annotation.Target;
                         mediaType = "application/json",
                         schema = @Schema(implementation = StandardError.class)))
 })
-public @interface DownloadReportPDFDoc {
+public @interface SendReportPDFToMailDoc {
 }
