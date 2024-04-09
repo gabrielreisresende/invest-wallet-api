@@ -82,10 +82,10 @@ After completing this step, let's start the application:
 mvn spring-boot:run
 ```
 
-There you go. The application is now available at `http://localhost:8080`.
+There you go. The application is now available at `http://localhost:8080/api/v1`.
 
 ```
-Tomcat started on port(s): 8080 (http)
+Tomcat started on port(s): 8080 (http) with contextpath '/api/v1'
 Started AppConfig in xxxx seconds (JVM running for xxxx)
 ```
 
