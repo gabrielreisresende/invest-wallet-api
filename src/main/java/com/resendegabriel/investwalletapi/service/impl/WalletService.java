@@ -113,6 +113,11 @@ public class WalletService implements IWalletService {
         return new WalletActiveSectorsReportDTO(wallet, walletTotalValue, distinctActiveSectorsQuantity, activeSectorsReportDTOS);
     }
 
+    @Override
+    public String getWalletOwnerMail(Long walletId) {
+        return walletRepository.findWalletOwnerMail(walletId);
+    }
+
     private BigDecimal getWalletTotalValue(Long walletId) {
         return activeService.getWalletTotalValue(walletId);
     }

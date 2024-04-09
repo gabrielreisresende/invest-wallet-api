@@ -30,6 +30,7 @@ public class SecurityConfiguration {
     private static final String ACTIVE_SECTOR_ENDPOINT = "/active-sectors/**";
     private static final String ACTIVE_CODE_ENDPOINT = "/active-codes/**";
     private static final String ACTIVES_ENDPOINT = "/actives/**";
+    private static final String REPORTS_ENDPOINT = "/export/reports/pdf/**";
 
     private static final String[] WHITE_AUTH_LIST = {
             "/auth/**",
@@ -68,6 +69,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, ACTIVE_CODE_ENDPOINT).hasRole(ADMIN_ROLE)
 
                         .requestMatchers(ACTIVES_ENDPOINT).hasRole(CLIENT_ROLE)
+
+                        .requestMatchers(REPORTS_ENDPOINT).hasRole(CLIENT_ROLE)
 
                         .anyRequest().authenticated())
 

@@ -7,4 +7,6 @@ public interface IMailService {
     void sendWelcomeEmail(String email, String firstName);
 
     void sendResetPasswordCodeToEmail(String email, int code);
+
+    void sendMailWithAttachment(String mail, String subject, byte[] attachmentData, String attachmentName);
 }

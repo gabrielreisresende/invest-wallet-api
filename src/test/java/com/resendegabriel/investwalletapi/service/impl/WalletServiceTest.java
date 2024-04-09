@@ -256,4 +256,15 @@ class WalletServiceTest {
         then(activeService).should().getWalletTotalValue(anyLong());
         then(activeService).shouldHaveNoMoreInteractions();
     }
+
+    @Test
+    void shouldFindTheWalletOwnerMailByWalletID() {
+        when(walletRepository.findWalletOwnerMail(anyLong())).thenReturn("email@email.com");
+
+        var response = walletService.getWalletOwnerMail(1L);
+
+        assertEquals("email@email.com", response);
+        then(walletRepository).should().findWalletOwnerMail(anyLong());
+        then(walletRepository).shouldHaveNoMoreInteractions();
+    }
 }
