@@ -49,7 +49,7 @@ http://localhost:8080/api/v1/swagger-ui/index.html#/
 - Send an email with the Wallet Report pdf.
 --------------------------------------------------------------------------------------------------------------
 #### Example of a Wallet Report generated:
-![image](https://github.com/gabrielreisresende/invest-wallet-api/assets/123999571/f52caa8e-bfee-4b11-9a2e-8a0a4f17fdf9)
+![image](https://github.com/gabrielreisresende/invest-wallet-api/assets/123999571/0550b570-25e4-4593-8c89-6be7768d1a36)
 
 --------------------------------------------------------------------------------------------------------------
 #### Email message with the wallet report pdf:
