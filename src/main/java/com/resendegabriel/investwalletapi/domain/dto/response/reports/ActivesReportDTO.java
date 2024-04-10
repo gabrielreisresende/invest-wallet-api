@@ -18,13 +18,19 @@ public class ActivesReportDTO {
 
     private String activeCode;
 
+    private Integer quantity;
+
+    private BigDecimal averageValue;
+
     private BigDecimal activeTotalValue;
 
     private BigDecimal activeValuePercentage;
 
-    public ActivesReportDTO(Long activeId, String activeCode, BigDecimal activeTotalValue) {
+    public ActivesReportDTO(Long activeId, String activeCode, Integer quantity, BigDecimal averageValue, BigDecimal activeTotalValue) {
         this.activeId = activeId;
         this.activeCode = activeCode;
+        this.quantity = quantity;
+        this.averageValue = averageValue;
         this.activeTotalValue = activeTotalValue.setScale(2, RoundingMode.HALF_UP);
     }
 }
