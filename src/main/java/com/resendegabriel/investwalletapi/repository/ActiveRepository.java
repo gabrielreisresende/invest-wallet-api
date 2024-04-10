@@ -15,6 +15,8 @@ public interface ActiveRepository extends JpaRepository<Active, Long> {
     @Query("SELECT NEW com.resendegabriel.investwalletapi.domain.dto.response.reports.ActivesReportDTO(" +
             "a.activeId, " +
             "a.activeCode.activeCode, " +
+            "a.quantity, " +
+            "a.averageValue, " +
             "CAST(a.quantity AS BIGDECIMAL) * a.averageValue) " +
             "FROM Active a " +
             "WHERE a.wallet.walletId = :walletId")

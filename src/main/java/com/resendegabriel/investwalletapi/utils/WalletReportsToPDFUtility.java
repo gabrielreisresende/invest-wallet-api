@@ -49,6 +49,7 @@ public class WalletReportsToPDFUtility {
         if (walletHasActives()) {
             walletInfo.add(subTitle("\nResumo da Carteira:"));
             walletInfo.add(getWalletTotalValue());
+            walletInfo.add(getTotalActivesQuantity());
             walletInfo.add(getDistinctActiveTypesQuantity());
             walletInfo.add(getDistinctActiveSectorsQuantity());
             walletInfo.add(subTitle("\nRelatório dos Ativos:"));
@@ -99,13 +100,23 @@ public class WalletReportsToPDFUtility {
         return new Paragraph("- Setores de ativos diferentes: " + walletActiveSectorsReportDTO.distinctActiveSectorsQuantity(), distinctActiveSectorsQuantityFont);
     }
 
+    private Paragraph getTotalActivesQuantity() {
+        Font totalActivesQuantityFont = FontFactory.getFont(FontFactory.HELVETICA);
+        totalActivesQuantityFont.setSize(12);
+
+        return new Paragraph("- Quantidade de ativos diferentes: " + walletActivesReportDTO.actives().size(), totalActivesQuantityFont);
+    }
+
+
     private PdfPTable getActivesReportData() {
-        String[] tableHeaders = {"Código do Ativo", "Valor Total(" + currencyCode + ")", "Porcentagem da Carteira (%)"};
+        String[] tableHeaders = {"Código do Ativo", "Quantidade", "Valor Médio", "Valor Total(" + currencyCode + ")", "Porcentagem da Carteira (%)"};
         var table = createTable(tableHeaders);
 
         walletActivesReportDTO.actives()
                 .forEach(active -> {
                     table.addCell(active.getActiveCode());
+                    table.addCell(String.valueOf(active.getQuantity()));
+                    table.addCell(currencyFormat(active.getAverageValue()));
                     table.addCell(currencyFormat(active.getActiveTotalValue()));
                     table.addCell(active.getActiveValuePercentage() + "%");
                 });
@@ -146,7 +157,7 @@ public class WalletReportsToPDFUtility {
 
     private static PdfPTable createTable(String[] tableHeaders) {
         PdfPTable table = new PdfPTable(tableHeaders.length);
-
+        table.setWidthPercentage(100f);
         Arrays.stream(tableHeaders)
                 .forEach(header -> {
                     PdfPCell cell = new PdfPCell(new Paragraph(header));
