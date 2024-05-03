@@ -1,6 +1,5 @@
 package com.resendegabriel.investwalletapi.service.mail;
 
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +28,7 @@ public class MailService implements IMailService {
     private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
     @Override
+    @Async
     public void sendMail(String mailAddress, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -47,6 +48,7 @@ public class MailService implements IMailService {
     }
 
     @Override
+    @Async
     public void sendWelcomeEmail(String email, String firstName) {
         String subject = "Bem vindo ao Invest Wallet!";
         String message = firstName + ", seja bem vindo ao Invest Wallet!\nSeu cadastro foi realizado com sucesso!\nMuito obrigado por confiar em nossa aplicação. Agora, aproveite para gerenciar seus investimentos!";
@@ -54,6 +56,7 @@ public class MailService implements IMailService {
     }
 
     @Override
+    @Async
     public void sendResetPasswordCodeToEmail(String email, int code) {
         String subject = "Código de verificação";
         String text = "Digite o seguinte código para conseguir redefinir sua senha: " + code;
@@ -62,6 +65,7 @@ public class MailService implements IMailService {
 
     @SneakyThrows
     @Override
+    @Async
     public void sendMailWithAttachment(String mail, String subject, byte[] attachmentData, String attachmentName) {
         MimeMessage message = mailSender.createMimeMessage();
 
