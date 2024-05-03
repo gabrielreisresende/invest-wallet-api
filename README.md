@@ -3,7 +3,7 @@
 
 [Read this page in English](https://github.com/gabrielreisresende/invest-wallet-api/blob/main/README.md) <br>
 
-[Leia esta página em português](https://github.com/gabrielreisresende/invest-wallet-api/blob/main/README-pt.md)
+[Leia esta página em Português](https://github.com/gabrielreisresende/invest-wallet-api/blob/main/README-pt.md)
 
 ## Description
 This is a REST API designed for controlling your investments in 'Fundos Imobiliários' (Real Estate Funds).
@@ -107,17 +107,15 @@ Link to test and view all endpoints from Invest Wallet:
 - Download a pdf with your detailed wallet report;
 - Receive the wallet report in your email.
 
-### Email functionalities
+## Email functionalities
 - Send an welcome email after the user registration;
 - Send an email with Two Factor Code authentication during the Reset Password Process;
 - Send an email with the Wallet Report pdf;
 - Send email asynchronously;
 --------------------------------------------------------------------------------------------------------------
-#### Example of a Wallet Report generated:
+### Example of a Wallet Report generated:
 ![image](https://github.com/gabrielreisresende/invest-wallet-api/assets/123999571/0550b570-25e4-4593-8c89-6be7768d1a36)
 
 --------------------------------------------------------------------------------------------------------------
-#### Email message with the wallet report pdf:
+### Email message with the wallet report pdf:
 ![image](https://github.com/gabrielreisresende/invest-wallet-api/assets/123999571/bb3cdc59-c3e1-4ae3-8fbf-777d98bf530d)
-
---------------------------------------------------------------------------------------------------------------
