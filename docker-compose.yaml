@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+
+  mysql:
+    image: mysql:8
+    env_file:
+      - .db_env
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - invest_wallet_net
+
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    env_file:
+      - .app_env
+    networks:
+      - invest_wallet_net
+
+networks:
+  invest_wallet_net:
+    driver: bridge
+
+volumes:
+  mysqldata:
