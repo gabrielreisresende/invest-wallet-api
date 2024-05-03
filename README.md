@@ -1,9 +1,9 @@
 # Invest Wallet - API
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/gabrielreisresende/invest-wallet-api/blob/main/LICENSE)
 
-[Read this page in English](http....README.md) <br>
+[Read this page in English](https://github.com/gabrielreisresende/invest-wallet-api/blob/main/README.md) <br>
 
-[Leia esta página em português](http....README-pt.md)
+[Leia esta página em português](https://github.com/gabrielreisresende/invest-wallet-api/blob/main/README-pt.md)
 
 ## Description
 This is a REST API designed for controlling your investments in 'Fundos Imobiliários' (Real Estate Funds).
